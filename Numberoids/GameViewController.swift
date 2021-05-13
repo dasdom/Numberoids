@@ -20,6 +20,9 @@ class GameViewController: UIViewController {
       button.addTarget(self, action: #selector(addNumber(_:)), for: .touchUpInside)
     }
     
+    contentView.fireButton.addTarget(self, action: #selector(fire(_:)), for: .touchUpInside)
+    contentView.deleteButton.addTarget(self, action: #selector(deleteLastCharacter(_:)), for: .touchUpInside)
+
     view = contentView
   }
   
@@ -46,5 +49,18 @@ extension GameViewController {
   @objc func addNumber(_ sender: UIButton) {
     let text = contentView.gameScene.inputLabel?.text ?? ""
     contentView.gameScene.inputLabel?.text = text + "\(sender.tag)"
+  }
+  
+  @objc func fire(_ sender: UIButton) {
+    if let text = contentView.gameScene.inputLabel?.text, false == text.isEmpty {
+      contentView.gameScene.fireBullet(text: text)
+    }
+    contentView.gameScene.inputLabel?.text = ""
+  }
+  
+  @objc func deleteLastCharacter(_ sender: UIButton) {
+    if let text = contentView.gameScene.inputLabel?.text, false == text.isEmpty {
+      contentView.gameScene.inputLabel?.text = String(text.dropLast())
+    }
   }
 }

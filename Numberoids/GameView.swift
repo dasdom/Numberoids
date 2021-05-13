@@ -68,6 +68,8 @@ class GameView: SKView {
 
   let gameScene: GameScene
   let numberButtons: [UIButton]
+  let fireButton: UIButton
+  let deleteButton: UIButton
   
   override init(frame: CGRect) {
     
@@ -88,7 +90,7 @@ class GameView: SKView {
       firstRowNumberButtons.append(button)
     }
     
-    let deleteButton = UIButton(type: .system)
+    deleteButton = UIButton(type: .system)
     deleteButton.backgroundColor = .init(white: 0.1, alpha: 1)
     deleteButton.setTitleColor(.white, for: .normal)
     deleteButton.tag = InputButtonType.delete.tag
@@ -106,7 +108,7 @@ class GameView: SKView {
     
     numberButtons = firstRowNumberButtons + secondRowNumberButtons
     
-    let fireButton = UIButton(type: .system)
+    fireButton = UIButton(type: .system)
     fireButton.backgroundColor = .init(white: 0.1, alpha: 1)
     fireButton.setTitleColor(.white, for: .normal)
     fireButton.tag = InputButtonType.fire.tag

@@ -14,6 +14,8 @@
 		F242023A264C71A000E0CA97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2420239264C71A000E0CA97 /* Assets.xcassets */; };
 		F2420242264C77AA00E0CA97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2420241264C77AA00E0CA97 /* LaunchScreen.storyboard */; };
 		F2420244264D017500E0CA97 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420243264D017500E0CA97 /* GameView.swift */; };
+		F2420246264D18F400E0CA97 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420245264D18F400E0CA97 /* PhysicsCategory.swift */; };
+		F2420248264D4F1E00E0CA97 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = F2420247264D4F1E00E0CA97 /* spark.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		F242023B264C71A000E0CA97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F2420241264C77AA00E0CA97 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F2420243264D017500E0CA97 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		F2420245264D18F400E0CA97 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
+		F2420247264D4F1E00E0CA97 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +64,10 @@
 			children = (
 				F242022C264C71A000E0CA97 /* AppDelegate.swift */,
 				F2420232264C71A000E0CA97 /* GameScene.swift */,
+				F2420245264D18F400E0CA97 /* PhysicsCategory.swift */,
 				F2420243264D017500E0CA97 /* GameView.swift */,
 				F2420234264C71A000E0CA97 /* GameViewController.swift */,
+				F2420247264D4F1E00E0CA97 /* spark.sks */,
 				F2420236264C71A000E0CA97 /* Main.storyboard */,
 				F2420241264C77AA00E0CA97 /* LaunchScreen.storyboard */,
 				F2420239264C71A000E0CA97 /* Assets.xcassets */,
@@ -128,6 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2420242264C77AA00E0CA97 /* LaunchScreen.storyboard in Resources */,
+				F2420248264D4F1E00E0CA97 /* spark.sks in Resources */,
 				F2420238264C71A000E0CA97 /* Main.storyboard in Resources */,
 				F242023A264C71A000E0CA97 /* Assets.xcassets in Resources */,
 			);
@@ -142,6 +149,7 @@
 			files = (
 				F2420233264C71A000E0CA97 /* GameScene.swift in Sources */,
 				F2420235264C71A000E0CA97 /* GameViewController.swift in Sources */,
+				F2420246264D18F400E0CA97 /* PhysicsCategory.swift in Sources */,
 				F2420244264D017500E0CA97 /* GameView.swift in Sources */,
 				F242022D264C71A000E0CA97 /* AppDelegate.swift in Sources */,
 			);
