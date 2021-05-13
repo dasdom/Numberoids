@@ -34,7 +34,7 @@ class GameScene: SKScene {
       let texture = SKTexture(image: UIImage(named: "spaceship")!)
       let hostNode = SKSpriteNode(texture: texture)
       let label = SKLabelNode(text: string)
-      label.position = CGPoint(x: 0, y: -16):wq
+      label.position = CGPoint(x: 0, y: -16)
       let x = CGFloat.random(in: 40..<view.bounds.width-40)
       let height = view.frame.height
       let y = CGFloat.random(in: height-100...height+100)
