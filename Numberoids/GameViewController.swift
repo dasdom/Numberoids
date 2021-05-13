@@ -7,40 +7,44 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
-                // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
-                
-                // Present the scene
-                view.presentScene(scene)
-            }
-            
-            view.ignoresSiblingOrder = true
-            
-            view.showsFPS = true
-            view.showsNodeCount = true
-        }
+  
+  let oneButton: UIButton = UIButton(type: .system)
+  var contentView: GameView {
+    return view as! GameView
+  }
+  
+  override func loadView() {
+    let contentView = GameView(frame: UIScreen.main.bounds)
+    
+    contentView.numberButtons.forEach { button in
+      button.addTarget(self, action: #selector(addNumber(_:)), for: .touchUpInside)
     }
+    
+    view = contentView
+  }
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    
+  }
+  
+  override var shouldAutorotate: Bool {
+    return true
+  }
+  
+  override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    return .landscape
+  }
+  
+  override var prefersStatusBarHidden: Bool {
+    return true
+  }
+}
 
-    override var shouldAutorotate: Bool {
-        return true
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
-    }
-
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
+extension GameViewController {
+  @objc func addNumber(_ sender: UIButton) {
+    let text = contentView.gameScene.inputLabel?.text ?? ""
+    contentView.gameScene.inputLabel?.text = text + "\(sender.tag)"
+  }
 }
