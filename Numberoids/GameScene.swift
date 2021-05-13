@@ -9,6 +9,7 @@ class GameScene: SKScene {
   
   var spaceship: SKSpriteNode?
   var inputLabel: SKLabelNode?
+  var labelBullet: SKLabelNode?
   var enemys: [SKSpriteNode] = []
   var bullet: SKSpriteNode?
   var sparkEmitter: SKEmitterNode?
@@ -30,44 +31,23 @@ class GameScene: SKScene {
       addChild(node)
     }
     
-    ["1+2"].forEach({ string in
-      let texture = SKTexture(image: UIImage(named: "spaceship")!)
-      let hostNode = SKSpriteNode(texture: texture)
-      let label = SKLabelNode(text: string)
-      label.position = CGPoint(x: 0, y: -16)
-      let x = CGFloat.random(in: 40..<view.bounds.width-40)
-      let height = view.frame.height
-      let y = CGFloat.random(in: height-100...height+100)
-      hostNode.addChild(label)
-      hostNode.position = CGPoint(x: x, y: y)
-      hostNode.name = string
-      hostNode.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: CGSize(width: 140, height: 60))
-      hostNode.physicsBody?.affectedByGravity = false
-      hostNode.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-      hostNode.physicsBody?.contactTestBitMask = PhysicsCategory.bullet
-      addChild(hostNode)
-      
-      enemys.append(hostNode)
-      
-      if let spaceship = spaceship {
-        let duration = Double.random(in: 15...25)
-        let action = SKAction.move(to: spaceship.position, duration: duration)
-        hostNode.run(action)
-      }
-    })
+    spawnEnemy()
     
     sparkEmitter = SKEmitterNode(fileNamed: "spark")
   }
   
   func fireBullet(text: String) {
-    let bulletSize = CGSize(width: 8, height: 8)
-    bullet = SKSpriteNode(color: .red, size: bulletSize)
-    bullet?.physicsBody = SKPhysicsBody(rectangleOf: bulletSize)
-    bullet?.physicsBody?.affectedByGravity = false
-    bullet?.physicsBody?.categoryBitMask = PhysicsCategory.bullet
-    bullet?.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
-
-    if let bullet = bullet, let spaceship = spaceship {
+    let bulletSize = CGSize(width: 20, height: 20)
+    
+    labelBullet = inputLabel?.copy() as? SKLabelNode
+    labelBullet?.fontName = "HelveticaNeue-Bold"
+    labelBullet?.fontColor = UIColor(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
+    labelBullet?.physicsBody = SKPhysicsBody(rectangleOf: bulletSize)
+    labelBullet?.physicsBody?.affectedByGravity = false
+    labelBullet?.physicsBody?.categoryBitMask = PhysicsCategory.bullet
+    labelBullet?.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
+    
+    if let bullet = labelBullet, let spaceship = spaceship {
       
       let nodes = enemys.filter({ node in
         if let calcString = node.name {
@@ -116,7 +96,7 @@ class GameScene: SKScene {
     label.position = CGPoint(x: 0, y: -16)
     let x = CGFloat.random(in: 40..<size.width-40)
     let height = size.height
-    let y = CGFloat.random(in: height-100...height+100)
+    let y = CGFloat.random(in: height-20...height+40)
     hostNode.addChild(label)
     hostNode.position = CGPoint(x: x, y: y)
     hostNode.name = string

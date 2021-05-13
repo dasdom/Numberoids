@@ -81,6 +81,7 @@ class GameView: SKView {
       button.setTitleColor(.white, for: .normal)
       button.tag = type.tag
       button.setTitle(type.title, for: .normal)
+      button.titleLabel?.font = .preferredFont(forTextStyle: .largeTitle)
       return button
     }
     
@@ -142,7 +143,7 @@ class GameView: SKView {
       stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
       stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
       
-      topStackView.heightAnchor.constraint(equalToConstant: 50),
+      topStackView.heightAnchor.constraint(equalToConstant: 60),
     ])
   }
   
