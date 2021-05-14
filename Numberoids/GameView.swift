@@ -70,6 +70,7 @@ class GameView: SKView {
   let numberButtons: [UIButton]
   let fireButton: UIButton
   let deleteButton: UIButton
+  private let spacing: CGFloat = 5
   
   override init(frame: CGRect) {
     
@@ -96,10 +97,11 @@ class GameView: SKView {
     deleteButton.setTitleColor(.white, for: .normal)
     deleteButton.tag = InputButtonType.delete.tag
     deleteButton.setTitle(InputButtonType.delete.title, for: .normal)
+    deleteButton.titleLabel?.font = .preferredFont(forTextStyle: .largeTitle)
     
-    let topStackView = UIStackView(arrangedSubviews: firstRowNumberButtons + [deleteButton])
+    let topStackView = UIStackView(arrangedSubviews: firstRowNumberButtons)
     topStackView.distribution = .fillEqually
-    topStackView.spacing = 2
+    topStackView.spacing = spacing
     
     var secondRowNumberButtons: [UIButton] = []
     [InputButtonType.five, .six, .seven, .eight, .nine].forEach { type in
@@ -114,16 +116,24 @@ class GameView: SKView {
     fireButton.setTitleColor(.white, for: .normal)
     fireButton.tag = InputButtonType.fire.tag
     fireButton.setTitle(InputButtonType.fire.title, for: .normal)
-    
-    let bottomStackView = UIStackView(arrangedSubviews: secondRowNumberButtons + [fireButton])
+    fireButton.titleLabel?.font = .preferredFont(forTextStyle: .largeTitle)
+
+    let bottomStackView = UIStackView(arrangedSubviews: secondRowNumberButtons)
     bottomStackView.distribution = .fillEqually
-    bottomStackView.spacing = 2
+    bottomStackView.spacing = spacing
     
-    let stackView = UIStackView(arrangedSubviews: [topStackView, bottomStackView])
+    let numberButtonsStackView = UIStackView(arrangedSubviews: [topStackView, bottomStackView])
+    numberButtonsStackView.axis = .vertical
+    numberButtonsStackView.distribution = .fillEqually
+    numberButtonsStackView.spacing = spacing
+    
+    let numberAndDeleteStackView = UIStackView(arrangedSubviews: [numberButtonsStackView, deleteButton])
+    numberAndDeleteStackView.spacing = spacing
+    
+    let stackView = UIStackView(arrangedSubviews: [numberAndDeleteStackView, fireButton])
     stackView.translatesAutoresizingMaskIntoConstraints = false
     stackView.axis = .vertical
-    stackView.distribution = .fillEqually
-    stackView.spacing = 2
+    stackView.spacing = spacing
     
     super.init(frame: frame)
     
@@ -131,8 +141,8 @@ class GameView: SKView {
     
     presentScene(gameScene)
         
-    ignoresSiblingOrder = true
-    showsPhysics = true
+//    ignoresSiblingOrder = true
+//    showsPhysics = true
     showsFPS = true
     showsNodeCount = true
     
@@ -144,6 +154,10 @@ class GameView: SKView {
       stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
       
       topStackView.heightAnchor.constraint(equalToConstant: 60),
+      bottomStackView.heightAnchor.constraint(equalTo: topStackView.heightAnchor),
+      
+      deleteButton.widthAnchor.constraint(equalToConstant: frame.width/8),
+      fireButton.heightAnchor.constraint(equalTo: topStackView.heightAnchor),
     ])
   }
   

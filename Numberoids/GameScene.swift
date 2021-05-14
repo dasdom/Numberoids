@@ -11,9 +11,15 @@ class GameScene: SKScene {
   var inputLabel: SKLabelNode?
   var labelBullet: SKLabelNode?
   var enemys: [SKSpriteNode] = []
-  var bullet: SKSpriteNode?
+//  var bullet: SKSpriteNode?
   var sparkEmitter: SKEmitterNode?
   var emitter: SKEmitterNode?
+  var scoreLabel: SKLabelNode?
+  var score: Int = 0 {
+    didSet {
+      scoreLabel?.text = "Score: \(score)"
+    }
+  }
  
   override func didMove(to view: SKView) {
     
@@ -21,13 +27,23 @@ class GameScene: SKScene {
     
     spaceship = SKSpriteNode(color: .gray, size: CGSize(width: 20, height: 30))
     if let node = spaceship {
-      node.position = CGPoint(x: view.center.x, y: 200)
+      node.anchorPoint = CGPoint(x: 0.5, y: 0)
+      node.position = CGPoint(x: view.center.x, y: 300)
       addChild(node)
     }
     
     inputLabel = SKLabelNode(text: "")
     if let node = inputLabel, let spaceship = spaceship {
-      node.position = CGPoint(x: spaceship.position.x, y: spaceship.position.y - 50)
+      node.verticalAlignmentMode = .top
+      node.position = CGPoint(x: 0, y: -10)
+      spaceship.addChild(node)
+    }
+    
+    scoreLabel = SKLabelNode(text: "Score: \(score)")
+    if let node = scoreLabel {
+      node.verticalAlignmentMode = .top
+      node.horizontalAlignmentMode = .right
+      node.position = CGPoint(x: view.frame.width - 10, y: view.frame.height - 10)
       addChild(node)
     }
     
@@ -59,18 +75,36 @@ class GameScene: SKScene {
       })
       
       if let node = nodes.first {
-        bullet.position = spaceship.position
+        let targetPosition = node.position
+        let startPosition = spaceship.position
+        
+        bullet.position = startPosition
         addChild(bullet)
         
-        let action = SKAction.move(to: node.position, duration: 1)
-        bullet.run(action)
+        let distance = hypot(targetPosition.x - startPosition.x, targetPosition.y - startPosition.y)
+        
+        let moveAction = SKAction.move(to: targetPosition, duration: Double(distance/size.height))
+        
+        let scoreAction = SKAction.run {
+          self.score += 1
+          bullet.removeFromParent()
+        }
+        
+        bullet.run(SKAction.sequence([moveAction, scoreAction]))
+        
       } else if let firstEnemy = enemys.first {
         bullet.position = spaceship.position
         addChild(bullet)
         
-        let position =  CGPoint(x: firstEnemy.position.x - firstEnemy.size.width - 100, y: size.height + 100)
-        let action = SKAction.move(to: position, duration: 1)
-        bullet.run(action)
+        let position =  CGPoint(x: firstEnemy.position.x - firstEnemy.size.width - 300, y: size.height + 100)
+        let moveAction = SKAction.move(to: position, duration: 1)
+        
+        let scoreAction = SKAction.run {
+          self.score -= 1
+          bullet.removeFromParent()
+        }
+        
+        bullet.run(SKAction.sequence([moveAction, scoreAction]))
       }
     }
   }
@@ -93,6 +127,7 @@ class GameScene: SKScene {
     let texture = SKTexture(image: UIImage(named: "spaceship")!)
     let hostNode = SKSpriteNode(texture: texture)
     let label = SKLabelNode(text: string)
+    label.fontName = "HelveticaNeue-Bold"
     label.position = CGPoint(x: 0, y: -16)
     let x = CGFloat.random(in: 40..<size.width-40)
     let height = size.height
@@ -122,27 +157,32 @@ extension GameScene: SKPhysicsContactDelegate {
     let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     if collision == PhysicsCategory.enemy | PhysicsCategory.bullet {
       
-      guard let emitterCopy = sparkEmitter?.copy() as? SKEmitterNode else { fatalError() }
-
+      //      guard let emitterCopy = sparkEmitter?.copy() as? SKEmitterNode else { fatalError() }
+      guard let emitterCopy = SKEmitterNode(fileNamed: "spark") else { return }
+      
       if let emitter = emitter {
         emitter.removeFromParent()
       }
       
-      if let node = contact.bodyA.node {
+      let enemyNode: SKSpriteNode?
+      
+      if contact.bodyA.categoryBitMask == PhysicsCategory.enemy {
+        enemyNode = contact.bodyA.node as? SKSpriteNode
+      } else if contact.bodyB.categoryBitMask == PhysicsCategory.enemy {
+        enemyNode = contact.bodyB.node as? SKSpriteNode
+      } else {
+        enemyNode = nil
+      }
+      
+      if let node = enemyNode {
         emitterCopy.position = node.position
         addChild(emitterCopy)
         emitter = emitterCopy
+        
         node.removeFromParent()
         enemys.removeAll(where: { $0 == node })
         
         spawnEnemy()
-        
-        
-      }
-      
-      if let node = contact.bodyB.node {
-        node.removeFromParent()
-        enemys.removeAll(where: { $0 == node })
       }
     }
   }
