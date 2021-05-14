@@ -66,16 +66,16 @@ enum InputButtonType: String {
 
 class GameView: SKView {
 
-  let gameScene: GameScene
+  var startScene: StartScene?
+  var gameScene: GameScene?
   let numberButtons: [UIButton]
   let fireButton: UIButton
   let deleteButton: UIButton
+  let buttonsStackView: UIStackView
   private let spacing: CGFloat = 5
   
   override init(frame: CGRect) {
-    
-    gameScene = GameScene(size: frame.size)
-    
+        
     let button: (InputButtonType) -> UIButton = { type in
       let button = UIButton(type: .system)
       button.backgroundColor = .init(white: 0.1, alpha: 1)
@@ -87,7 +87,7 @@ class GameView: SKView {
     }
     
     var firstRowNumberButtons: [UIButton] = []
-    [InputButtonType.zero, .one, .two, .three, .four].forEach { type in
+    [InputButtonType.one, .two, .three, .four, .five].forEach { type in
       let button = button(type)
       firstRowNumberButtons.append(button)
     }
@@ -104,7 +104,7 @@ class GameView: SKView {
     topStackView.spacing = spacing
     
     var secondRowNumberButtons: [UIButton] = []
-    [InputButtonType.five, .six, .seven, .eight, .nine].forEach { type in
+    [InputButtonType.six, .seven, .eight, .nine, .zero].forEach { type in
       let button = button(type)
       secondRowNumberButtons.append(button)
     }
@@ -130,28 +130,24 @@ class GameView: SKView {
     let numberAndDeleteStackView = UIStackView(arrangedSubviews: [numberButtonsStackView, deleteButton])
     numberAndDeleteStackView.spacing = spacing
     
-    let stackView = UIStackView(arrangedSubviews: [numberAndDeleteStackView, fireButton])
-    stackView.translatesAutoresizingMaskIntoConstraints = false
-    stackView.axis = .vertical
-    stackView.spacing = spacing
+    buttonsStackView = UIStackView(arrangedSubviews: [numberAndDeleteStackView, fireButton])
+    buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+    buttonsStackView.axis = .vertical
+    buttonsStackView.spacing = spacing
     
     super.init(frame: frame)
-    
-    gameScene.scaleMode = .aspectFill
-    
-    presentScene(gameScene)
         
 //    ignoresSiblingOrder = true
 //    showsPhysics = true
     showsFPS = true
     showsNodeCount = true
     
-    addSubview(stackView)
+    addSubview(buttonsStackView)
     
     NSLayoutConstraint.activate([
-      stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-      stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-      stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+      buttonsStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+      buttonsStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+      buttonsStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
       
       topStackView.heightAnchor.constraint(equalToConstant: 60),
       bottomStackView.heightAnchor.constraint(equalTo: topStackView.heightAnchor),
@@ -163,4 +159,44 @@ class GameView: SKView {
   
   required init?(coder: NSCoder) { fatalError() }
   
+  func presentGame(gameOverHandler: @escaping () -> Void) {
+    
+    gameScene = GameScene(size: frame.size)
+
+    if let scene = gameScene {
+      scene.gameOverHandler = gameOverHandler
+      scene.scaleMode = .aspectFill
+      presentScene(scene, transition: .fade(with: .black, duration: 1))
+      
+      UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 1, delay: 0, options: .curveEaseInOut) {
+        self.buttonsStackView.alpha = 1
+      } completion: { position in
+        
+      }
+    }
+  }
+  
+  func presentStart(animated: Bool, startHandler: @escaping () -> Void) {
+    
+    startScene = StartScene(size: frame.size)
+    
+    if let scene = startScene {
+      scene.startHandler = startHandler
+      scene.scaleMode = .aspectFill
+
+      if animated {
+        presentScene(scene, transition: .fade(with: .black, duration: 1))
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 1, delay: 0, options: .curveEaseInOut) {
+          self.buttonsStackView.alpha = 0
+        } completion: { position in
+          
+        }
+      } else {
+        presentScene(scene)
+        self.buttonsStackView.alpha = 0
+      }
+      
+
+    }
+  }
 }

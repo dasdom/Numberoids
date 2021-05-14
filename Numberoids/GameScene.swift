@@ -15,11 +15,13 @@ class GameScene: SKScene {
   var sparkEmitter: SKEmitterNode?
   var emitter: SKEmitterNode?
   var scoreLabel: SKLabelNode?
+  var numberOfShips: Int = 3
   var score: Int = 0 {
     didSet {
       scoreLabel?.text = "Score: \(score)"
     }
   }
+  var gameOverHandler: () -> Void = {}
  
   override func didMove(to view: SKView) {
     
@@ -29,6 +31,10 @@ class GameScene: SKScene {
     if let node = spaceship {
       node.anchorPoint = CGPoint(x: 0.5, y: 0)
       node.position = CGPoint(x: view.center.x, y: 300)
+      node.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 20, height: 30))
+      node.physicsBody?.affectedByGravity = false
+      node.physicsBody?.categoryBitMask = PhysicsCategory.spaceship
+      node.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
       addChild(node)
     }
     
@@ -138,7 +144,7 @@ class GameScene: SKScene {
     hostNode.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: CGSize(width: 140, height: 60))
     hostNode.physicsBody?.affectedByGravity = false
     hostNode.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-    hostNode.physicsBody?.contactTestBitMask = PhysicsCategory.bullet
+    hostNode.physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship
     addChild(hostNode)
     
     enemys.append(hostNode)
@@ -157,8 +163,7 @@ extension GameScene: SKPhysicsContactDelegate {
     let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     if collision == PhysicsCategory.enemy | PhysicsCategory.bullet {
       
-      //      guard let emitterCopy = sparkEmitter?.copy() as? SKEmitterNode else { fatalError() }
-      guard let emitterCopy = SKEmitterNode(fileNamed: "spark") else { return }
+      guard let emitterCopy = sparkEmitter?.copy() as? SKEmitterNode else { fatalError() }
       
       if let emitter = emitter {
         emitter.removeFromParent()
@@ -183,6 +188,33 @@ extension GameScene: SKPhysicsContactDelegate {
         enemys.removeAll(where: { $0 == node })
         
         spawnEnemy()
+      }
+    } else if collision == PhysicsCategory.enemy | PhysicsCategory.spaceship {
+      
+      guard let emitterCopy = sparkEmitter?.copy() as? SKEmitterNode else { fatalError() }
+      
+      if let emitter = emitter {
+        emitter.removeFromParent()
+      }
+      
+      let spaceshipNode: SKSpriteNode?
+      
+      if contact.bodyA.categoryBitMask == PhysicsCategory.spaceship {
+        spaceshipNode = contact.bodyA.node as? SKSpriteNode
+      } else if contact.bodyB.categoryBitMask == PhysicsCategory.spaceship {
+        spaceshipNode = contact.bodyB.node as? SKSpriteNode
+      } else {
+        spaceshipNode = nil
+      }
+      
+      if let node = spaceshipNode {
+        emitterCopy.position = node.position
+        addChild(emitterCopy)
+        emitter = emitterCopy
+        
+        node.removeFromParent()
+        
+        gameOverHandler()
       }
     }
   }

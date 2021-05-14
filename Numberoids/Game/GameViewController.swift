@@ -22,7 +22,11 @@ class GameViewController: UIViewController {
     
     contentView.fireButton.addTarget(self, action: #selector(fire(_:)), for: .touchUpInside)
     contentView.deleteButton.addTarget(self, action: #selector(deleteLastCharacter(_:)), for: .touchUpInside)
-
+    
+    contentView.presentStart(animated: false, startHandler: { [weak self] in
+      self?.game()
+    })
+    
     view = contentView
   }
   
@@ -43,24 +47,36 @@ class GameViewController: UIViewController {
   override var prefersStatusBarHidden: Bool {
     return true
   }
+  
+  func start() {
+    contentView.presentStart(animated: true, startHandler: { [weak self] in
+      self?.game()
+    })
+  }
+  
+  func game() {
+    contentView.presentGame(gameOverHandler: { [weak self] in
+      self?.start()
+    })
+  }
 }
 
 extension GameViewController {
   @objc func addNumber(_ sender: UIButton) {
-    let text = contentView.gameScene.inputLabel?.text ?? ""
-    contentView.gameScene.inputLabel?.text = text + "\(sender.tag)"
+    let text = contentView.gameScene?.inputLabel?.text ?? ""
+    contentView.gameScene?.inputLabel?.text = text + "\(sender.tag)"
   }
   
   @objc func fire(_ sender: UIButton) {
-    if let text = contentView.gameScene.inputLabel?.text, false == text.isEmpty {
-      contentView.gameScene.fireBullet(text: text)
+    if let text = contentView.gameScene?.inputLabel?.text, false == text.isEmpty {
+      contentView.gameScene?.fireBullet(text: text)
     }
-    contentView.gameScene.inputLabel?.text = ""
+    contentView.gameScene?.inputLabel?.text = ""
   }
   
   @objc func deleteLastCharacter(_ sender: UIButton) {
-    if let text = contentView.gameScene.inputLabel?.text, false == text.isEmpty {
-      contentView.gameScene.inputLabel?.text = String(text.dropLast())
+    if let text = contentView.gameScene?.inputLabel?.text, false == text.isEmpty {
+      contentView.gameScene?.inputLabel?.text = String(text.dropLast())
     }
   }
 }
