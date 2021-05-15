@@ -78,7 +78,7 @@ class GameView: SKView {
         
     let button: (InputButtonType) -> UIButton = { type in
       let button = UIButton(type: .system)
-      button.backgroundColor = .init(white: 0.1, alpha: 1)
+      button.backgroundColor = UIColor(named: "button_color")
       button.setTitleColor(.white, for: .normal)
       button.tag = type.tag
       button.setTitle(type.title, for: .normal)
@@ -93,7 +93,7 @@ class GameView: SKView {
     }
     
     deleteButton = UIButton(type: .system)
-    deleteButton.backgroundColor = .init(white: 0.1, alpha: 1)
+    deleteButton.backgroundColor = UIColor(named: "button_color")
     deleteButton.setTitleColor(.white, for: .normal)
     deleteButton.tag = InputButtonType.delete.tag
     deleteButton.setTitle(InputButtonType.delete.title, for: .normal)
@@ -112,7 +112,7 @@ class GameView: SKView {
     numberButtons = firstRowNumberButtons + secondRowNumberButtons
     
     fireButton = UIButton(type: .system)
-    fireButton.backgroundColor = .init(white: 0.1, alpha: 1)
+    fireButton.backgroundColor = UIColor(named: "button_color")
     fireButton.setTitleColor(.white, for: .normal)
     fireButton.tag = InputButtonType.fire.tag
     fireButton.setTitle(InputButtonType.fire.title, for: .normal)

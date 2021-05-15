@@ -26,22 +26,25 @@ class GameScene: SKScene {
   override func didMove(to view: SKView) {
     
     physicsWorld.contactDelegate = self
+    backgroundColor = .black
     
-    spaceship = SKSpriteNode(color: .gray, size: CGSize(width: 20, height: 30))
+    let texture = SKTexture(image: UIImage(named: "spaceship")!)
+    spaceship = SKSpriteNode(texture: texture)
     if let node = spaceship {
-      node.anchorPoint = CGPoint(x: 0.5, y: 0)
+      node.anchorPoint = CGPoint(x: 0.5, y: 0.5)
       node.position = CGPoint(x: view.center.x, y: 300)
-      node.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 20, height: 30))
+      node.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: CGSize(width: 60, height: 60))
       node.physicsBody?.affectedByGravity = false
       node.physicsBody?.categoryBitMask = PhysicsCategory.spaceship
       node.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
+      node.physicsBody?.isDynamic = false
       addChild(node)
     }
     
     inputLabel = SKLabelNode(text: "")
     if let node = inputLabel, let spaceship = spaceship {
       node.verticalAlignmentMode = .top
-      node.position = CGPoint(x: 0, y: -10)
+      node.position = CGPoint(x: 0, y: -40)
       spaceship.addChild(node)
     }
     
@@ -63,12 +66,15 @@ class GameScene: SKScene {
     
     labelBullet = inputLabel?.copy() as? SKLabelNode
     labelBullet?.fontName = "HelveticaNeue-Bold"
+    labelBullet?.fontSize = 20
     labelBullet?.fontColor = UIColor(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
+    labelBullet?.verticalAlignmentMode = .center
     labelBullet?.physicsBody = SKPhysicsBody(rectangleOf: bulletSize)
     labelBullet?.physicsBody?.affectedByGravity = false
     labelBullet?.physicsBody?.categoryBitMask = PhysicsCategory.bullet
     labelBullet?.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
-    
+    labelBullet?.physicsBody?.isDynamic = false
+
     if let bullet = labelBullet, let spaceship = spaceship {
       
       let nodes = enemys.filter({ node in
@@ -88,16 +94,34 @@ class GameScene: SKScene {
         addChild(bullet)
         
         let distance = hypot(targetPosition.x - startPosition.x, targetPosition.y - startPosition.y)
+        let diffX = targetPosition.x - startPosition.x
+        NSLog("distance \(distance), diffX \(diffX)")
+        let alpha: CGFloat
+//        if diffX > 0 {
+          alpha = -asin(diffX/distance)
+//        } else {
+//          alpha = asin(diffX/distance)
+//        }
+        NSLog("alpha \(alpha), \(alpha * 180 / CGFloat.pi)")
         
-        let moveAction = SKAction.move(to: targetPosition, duration: Double(distance/size.height))
+        let rotateAction = SKAction.rotate(byAngle: alpha, duration: 0.2)
+        let shootAction = SKAction.run({
+          let moveAction = SKAction.move(to: targetPosition, duration: Double(distance/self.size.height))
+          
+          let scoreAction = SKAction.run {
+            self.score += 1
+            bullet.removeFromParent()
+          }
+          
+          bullet.run(SKAction.sequence([moveAction, scoreAction]))
+        })
         
-        let scoreAction = SKAction.run {
-          self.score += 1
-          bullet.removeFromParent()
-        }
+        let waitAction = SKAction.wait(forDuration: 0.5)
+        let rotateBackAction = SKAction.rotate(byAngle: -alpha, duration: 0.3)
         
-        bullet.run(SKAction.sequence([moveAction, scoreAction]))
+        spaceship.run(SKAction.sequence([rotateAction, shootAction, waitAction, rotateBackAction]))
         
+                
       } else if let firstEnemy = enemys.first {
         bullet.position = spaceship.position
         addChild(bullet)
@@ -130,7 +154,7 @@ class GameScene: SKScene {
     let secondInt = sum - firstInt
     let string = "\(firstInt)+\(secondInt)"
     
-    let texture = SKTexture(image: UIImage(named: "spaceship")!)
+    let texture = SKTexture(image: UIImage(named: "alien_ship")!)
     let hostNode = SKSpriteNode(texture: texture)
     let label = SKLabelNode(text: string)
     label.fontName = "HelveticaNeue-Bold"
