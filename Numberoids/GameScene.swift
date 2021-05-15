@@ -15,7 +15,17 @@ class GameScene: SKScene {
   var sparkEmitter: SKEmitterNode?
   var emitter: SKEmitterNode?
   var scoreLabel: SKLabelNode?
-  var numberOfShips: Int = 3
+  var lifesShips: [SKSpriteNode] = []
+  var numberOfShips: Int = 3 {
+    didSet {
+      setupLifesShips()
+      if numberOfShips > 0 {
+        spawnEnemy()
+      } else {
+        gameOverHandler()
+      }
+    }
+  }
   var score: Int = 0 {
     didSet {
       scoreLabel?.text = "Score: \(score)"
@@ -31,12 +41,10 @@ class GameScene: SKScene {
     let texture = SKTexture(image: UIImage(named: "spaceship")!)
     spaceship = SKSpriteNode(texture: texture)
     if let node = spaceship {
-      node.anchorPoint = CGPoint(x: 0.5, y: 0.5)
       node.position = CGPoint(x: view.center.x, y: 300)
       node.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: CGSize(width: 60, height: 60))
       node.physicsBody?.affectedByGravity = false
       node.physicsBody?.categoryBitMask = PhysicsCategory.spaceship
-      node.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
       node.physicsBody?.isDynamic = false
       addChild(node)
     }
@@ -59,6 +67,26 @@ class GameScene: SKScene {
     spawnEnemy()
     
     sparkEmitter = SKEmitterNode(fileNamed: "spark")
+    
+    setupLifesShips()
+  }
+  
+  private func setupLifesShips() {
+    
+    for node in lifesShips {
+      node.removeFromParent()
+    }
+    
+    lifesShips.removeAll()
+    
+    for i in 0..<numberOfShips {
+      let node = SKSpriteNode(imageNamed: "spaceship")
+      node.position = CGPoint(x: 20 + 30 * CGFloat(i), y: frame.size.height - 30)
+      node.size = CGSize(width: 20, height: 40)
+      addChild(node)
+      
+      lifesShips.append(node)
+    }
   }
   
   func fireBullet(text: String) {
@@ -184,6 +212,7 @@ class GameScene: SKScene {
 extension GameScene: SKPhysicsContactDelegate {
   func didBegin(_ contact: SKPhysicsContact) {
     
+    print("contact: \(contact)")
     let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     if collision == PhysicsCategory.enemy | PhysicsCategory.bullet {
       
@@ -192,18 +221,8 @@ extension GameScene: SKPhysicsContactDelegate {
       if let emitter = emitter {
         emitter.removeFromParent()
       }
-      
-      let enemyNode: SKSpriteNode?
-      
-      if contact.bodyA.categoryBitMask == PhysicsCategory.enemy {
-        enemyNode = contact.bodyA.node as? SKSpriteNode
-      } else if contact.bodyB.categoryBitMask == PhysicsCategory.enemy {
-        enemyNode = contact.bodyB.node as? SKSpriteNode
-      } else {
-        enemyNode = nil
-      }
-      
-      if let node = enemyNode {
+            
+      if let node = node(for: PhysicsCategory.enemy, in: contact) {
         emitterCopy.position = node.position
         addChild(emitterCopy)
         emitter = emitterCopy
@@ -220,26 +239,35 @@ extension GameScene: SKPhysicsContactDelegate {
       if let emitter = emitter {
         emitter.removeFromParent()
       }
-      
-      let spaceshipNode: SKSpriteNode?
-      
-      if contact.bodyA.categoryBitMask == PhysicsCategory.spaceship {
-        spaceshipNode = contact.bodyA.node as? SKSpriteNode
-      } else if contact.bodyB.categoryBitMask == PhysicsCategory.spaceship {
-        spaceshipNode = contact.bodyB.node as? SKSpriteNode
+            
+      if let node = node(for: PhysicsCategory.enemy, in: contact) {
+        node.removeFromParent()
+        enemys.removeAll(where: { $0 == node })
       } else {
-        spaceshipNode = nil
+        return
       }
       
-      if let node = spaceshipNode {
+      if let node = node(for: PhysicsCategory.spaceship, in: contact) {
         emitterCopy.position = node.position
         addChild(emitterCopy)
         emitter = emitterCopy
-        
-        node.removeFromParent()
-        
-        gameOverHandler()
+                
+        numberOfShips -= 1
       }
+      
     }
+  }
+  
+  private func node(for category: UInt32, in contact: SKPhysicsContact) -> SKSpriteNode? {
+    
+    let node: SKSpriteNode?
+    if contact.bodyA.categoryBitMask == category {
+      node = contact.bodyA.node as? SKSpriteNode
+    } else if contact.bodyB.categoryBitMask == category {
+      node = contact.bodyB.node as? SKSpriteNode
+    } else {
+      node = nil
+    }
+    return node
   }
 }
