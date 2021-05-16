@@ -17,6 +17,9 @@
 		F2420246264D18F400E0CA97 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420245264D18F400E0CA97 /* PhysicsCategory.swift */; };
 		F2420248264D4F1E00E0CA97 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = F2420247264D4F1E00E0CA97 /* spark.sks */; };
 		F242024A264EA50500E0CA97 /* StartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420249264EA50500E0CA97 /* StartScene.swift */; };
+		F242024D2651094700E0CA97 /* Spaceship.swift in Sources */ = {isa = PBXBuildFile; fileRef = F242024C2651094700E0CA97 /* Spaceship.swift */; };
+		F242024F2651405200E0CA97 /* TaskGeneratorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */; };
+		F2420251265141C900E0CA97 /* PlusTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		F2420245264D18F400E0CA97 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
 		F2420247264D4F1E00E0CA97 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 		F2420249264EA50500E0CA97 /* StartScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScene.swift; sourceTree = "<group>"; };
+		F242024C2651094700E0CA97 /* Spaceship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceship.swift; sourceTree = "<group>"; };
+		F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskGeneratorProtocol.swift; sourceTree = "<group>"; };
+		F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusTaskGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +72,6 @@
 			children = (
 				F242022C264C71A000E0CA97 /* AppDelegate.swift */,
 				F2420249264EA50500E0CA97 /* StartScene.swift */,
-				F2420232264C71A000E0CA97 /* GameScene.swift */,
 				F2420245264D18F400E0CA97 /* PhysicsCategory.swift */,
 				F242024B264EB13000E0CA97 /* Game */,
 				F2420247264D4F1E00E0CA97 /* spark.sks */,
@@ -83,6 +88,10 @@
 			children = (
 				F2420243264D017500E0CA97 /* GameView.swift */,
 				F2420234264C71A000E0CA97 /* GameViewController.swift */,
+				F2420232264C71A000E0CA97 /* GameScene.swift */,
+				F242024C2651094700E0CA97 /* Spaceship.swift */,
+				F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */,
+				F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -160,7 +169,10 @@
 			files = (
 				F2420233264C71A000E0CA97 /* GameScene.swift in Sources */,
 				F242024A264EA50500E0CA97 /* StartScene.swift in Sources */,
+				F2420251265141C900E0CA97 /* PlusTaskGenerator.swift in Sources */,
 				F2420235264C71A000E0CA97 /* GameViewController.swift in Sources */,
+				F242024F2651405200E0CA97 /* TaskGeneratorProtocol.swift in Sources */,
+				F242024D2651094700E0CA97 /* Spaceship.swift in Sources */,
 				F2420246264D18F400E0CA97 /* PhysicsCategory.swift in Sources */,
 				F2420244264D017500E0CA97 /* GameView.swift in Sources */,
 				F242022D264C71A000E0CA97 /* AppDelegate.swift in Sources */,

@@ -15,6 +15,7 @@ class GameScene: SKScene {
   var sparkEmitter: SKEmitterNode?
   var emitter: SKEmitterNode?
   var scoreLabel: SKLabelNode?
+  var taskGenerator: TaskGeneratorProtocol = PlusTaskGenerator(maxValue: 20)
   var lifesShips: [SKSpriteNode] = []
   var numberOfShips: Int = 3 {
     didSet {
@@ -39,13 +40,9 @@ class GameScene: SKScene {
     backgroundColor = .black
     
     let texture = SKTexture(image: UIImage(named: "spaceship")!)
-    spaceship = SKSpriteNode(texture: texture)
+    spaceship = Spaceship(texture: texture)
     if let node = spaceship {
       node.position = CGPoint(x: view.center.x, y: 300)
-      node.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: CGSize(width: 60, height: 60))
-      node.physicsBody?.affectedByGravity = false
-      node.physicsBody?.categoryBitMask = PhysicsCategory.spaceship
-      node.physicsBody?.isDynamic = false
       addChild(node)
     }
     
@@ -93,25 +90,21 @@ class GameScene: SKScene {
     let bulletSize = CGSize(width: 20, height: 20)
     
     labelBullet = inputLabel?.copy() as? SKLabelNode
-    labelBullet?.fontName = "HelveticaNeue-Bold"
-    labelBullet?.fontSize = 20
-    labelBullet?.fontColor = UIColor(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
-    labelBullet?.verticalAlignmentMode = .center
-    labelBullet?.physicsBody = SKPhysicsBody(rectangleOf: bulletSize)
-    labelBullet?.physicsBody?.affectedByGravity = false
-    labelBullet?.physicsBody?.categoryBitMask = PhysicsCategory.bullet
-    labelBullet?.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
-    labelBullet?.physicsBody?.isDynamic = false
 
     if let bullet = labelBullet, let spaceship = spaceship {
+      bullet.fontName = "HelveticaNeue-Bold"
+      bullet.fontSize = 20
+      bullet.fontColor = UIColor(named: "bullet_font_color")
+      bullet.verticalAlignmentMode = .center
+      bullet.physicsBody = SKPhysicsBody(rectangleOf: bulletSize)
+      bullet.physicsBody?.affectedByGravity = false
+      bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
+      bullet.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
+      bullet.physicsBody?.isDynamic = false
       
-      let nodes = enemys.filter({ node in
-        if let calcString = node.name {
-          let result = calculate(calcString)
-          return text == result
-        } else {
-          return false
-        }
+      let nodes = enemys.filter({ [weak self] node in
+        guard let self = self else { return false }
+        return self.taskGenerator.evaluate(task: node, input: text)
       })
       
       if let node = nodes.first {
@@ -167,44 +160,51 @@ class GameScene: SKScene {
     }
   }
   
-  func calculate(_ string: String) -> String {
-    let additionComponents = string.split(separator: "+")
-    let calcResult = additionComponents.reduce(0, { result, next in
-      let int = Int(next) ?? 0
-      return result + int
-    })
-    return "\(calcResult)"
-  }
+//  func calculate(_ string: String) -> String {
+//    let additionComponents = string.split(separator: "+")
+//    let calcResult = additionComponents.reduce(0, { result, next in
+//      let int = Int(next) ?? 0
+//      return result + int
+//    })
+//    return "\(calcResult)"
+//  }
   
   func spawnEnemy() {
-    let sum = Int.random(in: 0...20)
-    let firstInt = Int.random(in: 0...sum)
-    let secondInt = sum - firstInt
-    let string = "\(firstInt)+\(secondInt)"
+//    let sum = Int.random(in: 0...20)
+//    let firstInt = Int.random(in: 0...sum)
+//    let secondInt = sum - firstInt
+//    let string = "\(firstInt)+\(secondInt)"
+//
+//    let texture = SKTexture(image: UIImage(named: "alien_ship")!)
+//    let hostNode = SKSpriteNode(texture: texture)
+//    let label = SKLabelNode(text: string)
+//    label.fontName = "HelveticaNeue-Bold"
+//    label.position = CGPoint(x: 0, y: -16)
+//    let x = CGFloat.random(in: 40..<size.width-40)
+//    let height = size.height
+//    let y = CGFloat.random(in: height-20...height+40)
+//    hostNode.addChild(label)
+//    hostNode.position = CGPoint(x: x, y: y)
+//    hostNode.name = string
+//    hostNode.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: CGSize(width: 140, height: 60))
+//    hostNode.physicsBody?.affectedByGravity = false
+//    hostNode.physicsBody?.categoryBitMask = PhysicsCategory.enemy
+//    hostNode.physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship
     
-    let texture = SKTexture(image: UIImage(named: "alien_ship")!)
-    let hostNode = SKSpriteNode(texture: texture)
-    let label = SKLabelNode(text: string)
-    label.fontName = "HelveticaNeue-Bold"
-    label.position = CGPoint(x: 0, y: -16)
+    let enemy = taskGenerator.random()
     let x = CGFloat.random(in: 40..<size.width-40)
     let height = size.height
     let y = CGFloat.random(in: height-20...height+40)
-    hostNode.addChild(label)
-    hostNode.position = CGPoint(x: x, y: y)
-    hostNode.name = string
-    hostNode.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: CGSize(width: 140, height: 60))
-    hostNode.physicsBody?.affectedByGravity = false
-    hostNode.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-    hostNode.physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship
-    addChild(hostNode)
+    enemy.position = CGPoint(x: x, y: y)
     
-    enemys.append(hostNode)
+    addChild(enemy)
+    
+    enemys.append(enemy)
     
     if let spaceship = spaceship {
       let duration = Double.random(in: 15...20)
       let action = SKAction.move(to: spaceship.position, duration: duration)
-      hostNode.run(action)
+      enemy.run(action)
     }
   }
 }
@@ -212,7 +212,6 @@ class GameScene: SKScene {
 extension GameScene: SKPhysicsContactDelegate {
   func didBegin(_ contact: SKPhysicsContact) {
     
-    print("contact: \(contact)")
     let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     if collision == PhysicsCategory.enemy | PhysicsCategory.bullet {
       

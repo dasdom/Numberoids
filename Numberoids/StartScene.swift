@@ -32,7 +32,23 @@ class StartScene: SKScene {
        let startButtonNode = startButtonNode {
       
       if startButtonNode.frame.contains(position) {
-        startHandler()
+        let scaleAction = SKAction.scale(by: 0.9, duration: 0.1)
+        startButtonNode.run(scaleAction)
+      }
+    }
+  }
+  
+  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    
+    if let position = touches.first?.location(in: self),
+       let startButtonNode = startButtonNode {
+      
+      if startButtonNode.frame.contains(position) {
+        let scaleAction = SKAction.scale(by: 1/0.9, duration: 0.1)
+        let startAction = SKAction.run {
+          self.startHandler()
+        }
+        startButtonNode.run(SKAction.sequence([scaleAction, startAction]))
       }
     }
   }
