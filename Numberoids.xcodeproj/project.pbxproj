@@ -20,6 +20,8 @@
 		F242024D2651094700E0CA97 /* Spaceship.swift in Sources */ = {isa = PBXBuildFile; fileRef = F242024C2651094700E0CA97 /* Spaceship.swift */; };
 		F242024F2651405200E0CA97 /* TaskGeneratorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */; };
 		F2420251265141C900E0CA97 /* PlusTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */; };
+		F24202532651BDBA00E0CA97 /* KeyboardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24202522651BDBA00E0CA97 /* KeyboardType.swift */; };
+		F24202552651BE6600E0CA97 /* KeyboardNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24202542651BE6600E0CA97 /* KeyboardNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		F242024C2651094700E0CA97 /* Spaceship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceship.swift; sourceTree = "<group>"; };
 		F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskGeneratorProtocol.swift; sourceTree = "<group>"; };
 		F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusTaskGenerator.swift; sourceTree = "<group>"; };
+		F24202522651BDBA00E0CA97 /* KeyboardType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardType.swift; sourceTree = "<group>"; };
+		F24202542651BE6600E0CA97 /* KeyboardNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,9 +93,11 @@
 				F2420243264D017500E0CA97 /* GameView.swift */,
 				F2420234264C71A000E0CA97 /* GameViewController.swift */,
 				F2420232264C71A000E0CA97 /* GameScene.swift */,
+				F24202542651BE6600E0CA97 /* KeyboardNode.swift */,
 				F242024C2651094700E0CA97 /* Spaceship.swift */,
 				F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */,
 				F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */,
+				F24202522651BDBA00E0CA97 /* KeyboardType.swift */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -173,6 +179,8 @@
 				F2420235264C71A000E0CA97 /* GameViewController.swift in Sources */,
 				F242024F2651405200E0CA97 /* TaskGeneratorProtocol.swift in Sources */,
 				F242024D2651094700E0CA97 /* Spaceship.swift in Sources */,
+				F24202532651BDBA00E0CA97 /* KeyboardType.swift in Sources */,
+				F24202552651BE6600E0CA97 /* KeyboardNode.swift in Sources */,
 				F2420246264D18F400E0CA97 /* PhysicsCategory.swift in Sources */,
 				F2420244264D017500E0CA97 /* GameView.swift in Sources */,
 				F242022D264C71A000E0CA97 /* AppDelegate.swift in Sources */,

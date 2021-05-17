@@ -6,6 +6,8 @@ import SpriteKit
 
 protocol TaskGeneratorProtocol {
   
-  func random() -> SKSpriteNode
-  func evaluate(task: SKSpriteNode, input: String) -> Bool
+  var keyboardType: KeyboadType { get }
+  var isImage: Bool { get }
+  func random() -> String
+  func evaluate(task: String, input: String) -> Bool
 }

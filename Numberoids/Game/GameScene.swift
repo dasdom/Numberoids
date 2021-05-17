@@ -66,6 +66,10 @@ class GameScene: SKScene {
     sparkEmitter = SKEmitterNode(fileNamed: "spark")
     
     setupLifesShips()
+    
+    let keyboard = KeyboardNode(size: view.frame.size, textInputHandler: fireBullet(text:))
+    keyboard.position = CGPoint(x: 0, y: view.safeAreaInsets.bottom)
+    addChild(keyboard)
   }
   
   private func setupLifesShips() {
@@ -89,7 +93,7 @@ class GameScene: SKScene {
   func fireBullet(text: String) {
     let bulletSize = CGSize(width: 20, height: 20)
     
-    labelBullet = inputLabel?.copy() as? SKLabelNode
+    labelBullet = SKLabelNode(text: text)
 
     if let bullet = labelBullet, let spaceship = spaceship {
       bullet.fontName = "HelveticaNeue-Bold"
@@ -103,8 +107,8 @@ class GameScene: SKScene {
       bullet.physicsBody?.isDynamic = false
       
       let nodes = enemys.filter({ [weak self] node in
-        guard let self = self else { return false }
-        return self.taskGenerator.evaluate(task: node, input: text)
+        guard let self = self, let task = node.name else { return false }
+        return self.taskGenerator.evaluate(task: task, input: text)
       })
       
       if let node = nodes.first {
@@ -116,14 +120,14 @@ class GameScene: SKScene {
         
         let distance = hypot(targetPosition.x - startPosition.x, targetPosition.y - startPosition.y)
         let diffX = targetPosition.x - startPosition.x
-        NSLog("distance \(distance), diffX \(diffX)")
+//        NSLog("distance \(distance), diffX \(diffX)")
         let alpha: CGFloat
 //        if diffX > 0 {
           alpha = -asin(diffX/distance)
 //        } else {
 //          alpha = asin(diffX/distance)
 //        }
-        NSLog("alpha \(alpha), \(alpha * 180 / CGFloat.pi)")
+//        NSLog("alpha \(alpha), \(alpha * 180 / CGFloat.pi)")
         
         let rotateAction = SKAction.rotate(byAngle: alpha, duration: 0.2)
         let shootAction = SKAction.run({
@@ -160,38 +164,24 @@ class GameScene: SKScene {
     }
   }
   
-//  func calculate(_ string: String) -> String {
-//    let additionComponents = string.split(separator: "+")
-//    let calcResult = additionComponents.reduce(0, { result, next in
-//      let int = Int(next) ?? 0
-//      return result + int
-//    })
-//    return "\(calcResult)"
-//  }
-  
   func spawnEnemy() {
-//    let sum = Int.random(in: 0...20)
-//    let firstInt = Int.random(in: 0...sum)
-//    let secondInt = sum - firstInt
-//    let string = "\(firstInt)+\(secondInt)"
-//
-//    let texture = SKTexture(image: UIImage(named: "alien_ship")!)
-//    let hostNode = SKSpriteNode(texture: texture)
-//    let label = SKLabelNode(text: string)
-//    label.fontName = "HelveticaNeue-Bold"
-//    label.position = CGPoint(x: 0, y: -16)
-//    let x = CGFloat.random(in: 40..<size.width-40)
-//    let height = size.height
-//    let y = CGFloat.random(in: height-20...height+40)
-//    hostNode.addChild(label)
-//    hostNode.position = CGPoint(x: x, y: y)
-//    hostNode.name = string
-//    hostNode.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: CGSize(width: 140, height: 60))
-//    hostNode.physicsBody?.affectedByGravity = false
-//    hostNode.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-//    hostNode.physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship
+
+    let string = taskGenerator.random()
     
-    let enemy = taskGenerator.random()
+    let texture = SKTexture(image: UIImage(named: "alien_ship")!)
+    let enemy = SKSpriteNode(texture: texture)
+    let label = SKLabelNode(text: string)
+    label.fontName = "HelveticaNeue-Bold"
+    label.position = CGPoint(x: 0, y: -4)
+    label.horizontalAlignmentMode = .center
+    label.verticalAlignmentMode = .center
+    enemy.addChild(label)
+    enemy.name = string
+    enemy.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: texture.size())
+    enemy.physicsBody?.affectedByGravity = false
+    enemy.physicsBody?.categoryBitMask = PhysicsCategory.enemy
+    enemy.physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship
+    
     let x = CGFloat.random(in: 40..<size.width-40)
     let height = size.height
     let y = CGFloat.random(in: height-20...height+40)
