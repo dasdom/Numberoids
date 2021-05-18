@@ -12,7 +12,7 @@ class Spaceship: SKSpriteNode {
     super.init(texture: texture, color: .white, size: size)
     
     if let texture = texture {
-      physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: texture.size())
+      physicsBody = SKPhysicsBody(rectangleOf: texture.size())
     }
     physicsBody?.affectedByGravity = false
     physicsBody?.categoryBitMask = PhysicsCategory.spaceship

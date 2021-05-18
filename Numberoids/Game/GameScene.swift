@@ -164,8 +164,15 @@ class GameScene: SKScene {
     }
   }
   
+//  func spawnEnemies(_ number: Int) {
+//    for i in 0..<number {
+//      DispatchQueue.main.asyncAfter(deadline: .now() + 4 * TimeInterval(i), execute: spawnEnemy)
+//    }
+//  }
+  
   func spawnEnemy() {
 
+    print("spawn Enemy")
     let string = taskGenerator.random()
     
     let texture = SKTexture(image: UIImage(named: "alien_ship")!)
@@ -177,7 +184,7 @@ class GameScene: SKScene {
     label.verticalAlignmentMode = .center
     enemy.addChild(label)
     enemy.name = string
-    enemy.physicsBody = SKPhysicsBody(texture: texture, alphaThreshold: 0.1, size: texture.size())
+    enemy.physicsBody = SKPhysicsBody(rectangleOf: texture.size())
     enemy.physicsBody?.affectedByGravity = false
     enemy.physicsBody?.categoryBitMask = PhysicsCategory.enemy
     enemy.physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship
@@ -219,7 +226,9 @@ extension GameScene: SKPhysicsContactDelegate {
         node.removeFromParent()
         enemys.removeAll(where: { $0 == node })
         
-        spawnEnemy()
+        if enemys.isEmpty {
+          spawnEnemy()
+        }
       }
     } else if collision == PhysicsCategory.enemy | PhysicsCategory.spaceship {
       
