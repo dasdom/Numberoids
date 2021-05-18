@@ -11,7 +11,7 @@ class KeyboardNode: SKSpriteNode {
   private let gap: CGFloat = 5
   private var keys: [SKShapeNode] = []
 
-  init(size: CGSize, textInputHandler: @escaping (String) -> Void) {
+  init(size: CGSize, type: KeyboadType, textInputHandler: @escaping (String) -> Void) {
     
     self.textInputHandler = textInputHandler
     
@@ -22,6 +22,41 @@ class KeyboardNode: SKSpriteNode {
     isUserInteractionEnabled = true
     anchorPoint = CGPoint(x: 0, y: 0)
     
+    switch type {
+      case .twentyOne:
+        twentyOne()
+      case .five:
+        five()
+    }
+  }
+  
+  func five() {
+    let numberOfKeysInRow: CGFloat = 5
+    let width = (size.width - (numberOfKeysInRow + 1) * gap) / numberOfKeysInRow
+    for i in 1...5 {
+      
+      let key = SKShapeNode(rectOf: CGSize(width: width, height: height))
+      key.fillColor = UIColor(named: "button_color") ?? .yellow
+      key.strokeColor = .clear
+      let name = "\(i)"
+      key.name = name
+      
+      let label = SKLabelNode(text: name)
+      label.horizontalAlignmentMode = .center
+      label.verticalAlignmentMode = .center
+      
+      key.addChild(label)
+      
+      let x = gap + CGFloat((i - 1) % 10) * (width + gap) + width / 2
+      let y: CGFloat = gap + height / 2
+      key.position = CGPoint(x: x, y: y)
+      
+      addChild(key)
+      keys.append(key)
+    }
+  }
+  
+  func twentyOne() {
     let width = (size.width - 11 * gap) / 10
     for j in [0,1] {
       let start = j * 10 + 1

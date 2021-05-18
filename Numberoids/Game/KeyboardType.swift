@@ -6,4 +6,5 @@ import Foundation
 
 enum KeyboadType {
   case twentyOne
+  case five
 }

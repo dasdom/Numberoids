@@ -15,7 +15,7 @@ class GameScene: SKScene {
   var sparkEmitter: SKEmitterNode?
   var emitter: SKEmitterNode?
   var scoreLabel: SKLabelNode?
-  var taskGenerator: TaskGeneratorProtocol = PlusTaskGenerator(maxValue: 20)
+  var taskGenerator: TaskGeneratorProtocol = FiveDotsTaskGenerator()
   var lifesShips: [SKSpriteNode] = []
   var numberOfShips: Int = 3 {
     didSet {
@@ -67,7 +67,7 @@ class GameScene: SKScene {
     
     setupLifesShips()
     
-    let keyboard = KeyboardNode(size: view.frame.size, textInputHandler: fireBullet(text:))
+    let keyboard = KeyboardNode(size: view.frame.size, type: taskGenerator.keyboardType, textInputHandler: fireBullet(text:))
     keyboard.position = CGPoint(x: 0, y: view.safeAreaInsets.bottom)
     addChild(keyboard)
   }

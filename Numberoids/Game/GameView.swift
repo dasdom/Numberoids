@@ -22,9 +22,10 @@ class GameView: SKView {
   
   required init?(coder: NSCoder) { fatalError() }
   
-  func presentGame(gameOverHandler: @escaping () -> Void) {
+  func presentGame(taskGenerator: TaskGeneratorProtocol, gameOverHandler: @escaping () -> Void) {
     
     gameScene = GameScene(size: frame.size)
+    gameScene?.taskGenerator = taskGenerator
 
     if let scene = gameScene {
       scene.gameOverHandler = gameOverHandler
@@ -33,7 +34,7 @@ class GameView: SKView {
     }
   }
   
-  func presentStart(animated: Bool, startHandler: @escaping () -> Void) {
+  func presentStart(animated: Bool, startHandler: @escaping (GameMode) -> Void) {
     
     startScene = StartScene(size: frame.size)
     

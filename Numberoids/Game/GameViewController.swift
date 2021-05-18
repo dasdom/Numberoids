@@ -16,8 +16,8 @@ class GameViewController: UIViewController {
   override func loadView() {
     let contentView = GameView(frame: UIScreen.main.bounds)
     
-    contentView.presentStart(animated: false, startHandler: { [weak self] in
-      self?.game()
+    contentView.presentStart(animated: false, startHandler: { [weak self] mode in
+      self?.game(mode: mode)
     })
     
     view = contentView
@@ -42,13 +42,20 @@ class GameViewController: UIViewController {
   }
   
   func start() {
-    contentView.presentStart(animated: true, startHandler: { [weak self] in
-      self?.game()
+    contentView.presentStart(animated: true, startHandler: { [weak self] mode in
+      self?.game(mode: mode)
     })
   }
   
-  func game() {
-    contentView.presentGame(gameOverHandler: { [weak self] in
+  func game(mode: GameMode) {
+    let taskGenerator: TaskGeneratorProtocol
+    switch mode {
+      case .preschool:
+        taskGenerator = FiveDotsTaskGenerator()
+      case .upToTweentyPlus:
+        taskGenerator = PlusTaskGenerator(maxValue: 20)
+    }
+    contentView.presentGame(taskGenerator: taskGenerator, gameOverHandler: { [weak self] in
       self?.start()
     })
   }
