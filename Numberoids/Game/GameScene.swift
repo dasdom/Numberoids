@@ -211,7 +211,7 @@ extension GameScene: SKPhysicsContactDelegate {
     
     let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     if collision == PhysicsCategory.enemy | PhysicsCategory.bullet {
-      
+            
       guard let emitterCopy = sparkEmitter?.copy() as? SKEmitterNode else { fatalError() }
       
       if let emitter = emitter {
@@ -221,14 +221,21 @@ extension GameScene: SKPhysicsContactDelegate {
       if let node = node(for: PhysicsCategory.enemy, in: contact) {
         emitterCopy.position = node.position
         addChild(emitterCopy)
+
         emitter = emitterCopy
-        
+
+        node.removeAllActions()
         node.removeFromParent()
+        
         enemys.removeAll(where: { $0 == node })
         
         if enemys.isEmpty {
           spawnEnemy()
         }
+      }
+      
+      if let node = node(for: PhysicsCategory.bullet, in: contact) {
+        node.removeFromParent()
       }
     } else if collision == PhysicsCategory.enemy | PhysicsCategory.spaceship {
       
@@ -239,6 +246,7 @@ extension GameScene: SKPhysicsContactDelegate {
       }
             
       if let node = node(for: PhysicsCategory.enemy, in: contact) {
+        node.removeAllActions()
         node.removeFromParent()
         enemys.removeAll(where: { $0 == node })
       } else {
@@ -256,13 +264,13 @@ extension GameScene: SKPhysicsContactDelegate {
     }
   }
   
-  private func node(for category: UInt32, in contact: SKPhysicsContact) -> SKSpriteNode? {
+  private func node(for category: UInt32, in contact: SKPhysicsContact) -> SKNode? {
     
-    let node: SKSpriteNode?
+    let node: SKNode?
     if contact.bodyA.categoryBitMask == category {
-      node = contact.bodyA.node as? SKSpriteNode
+      node = contact.bodyA.node
     } else if contact.bodyB.categoryBitMask == category {
-      node = contact.bodyB.node as? SKSpriteNode
+      node = contact.bodyB.node
     } else {
       node = nil
     }
