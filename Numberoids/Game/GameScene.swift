@@ -1,5 +1,5 @@
 //  Created by Dominik Hauser on 12/05/2021.
-//  
+//  Copyright © 2021 dasdom. All rights reserved.
 //
 
 import SpriteKit
@@ -13,7 +13,17 @@ class GameScene: SKScene {
   var enemys: [SKSpriteNode] = []
 //  var bullet: SKSpriteNode?
   var sparkEmitter: SKEmitterNode?
-  var emitter: SKEmitterNode?
+  var emitter: SKEmitterNode? {
+    didSet {
+      emitter?.run(SKAction.sequence([
+        SKAction.wait(forDuration: 0.5),
+        SKAction.run { [weak emitter] in
+          emitter?.removeAllActions()
+          emitter?.removeFromParent()
+        }
+      ]))
+    }
+  }
   var scoreLabel: SKLabelNode?
   var taskGenerator: TaskGeneratorProtocol = FiveDotsTaskGenerator()
   var lifesShips: [SKSpriteNode] = []
@@ -39,8 +49,7 @@ class GameScene: SKScene {
     physicsWorld.contactDelegate = self
     backgroundColor = .black
     
-    let texture = SKTexture(image: UIImage(named: "spaceship")!)
-    spaceship = Spaceship(texture: texture)
+    spaceship = Spaceship()
     if let node = spaceship {
       node.position = CGPoint(x: view.center.x, y: 300)
       addChild(node)
@@ -175,19 +184,7 @@ class GameScene: SKScene {
     print("spawn Enemy")
     let string = taskGenerator.random()
     
-    let texture = SKTexture(image: UIImage(named: "alien_ship")!)
-    let enemy = SKSpriteNode(texture: texture)
-    let label = SKLabelNode(text: string)
-    label.fontName = "HelveticaNeue-Bold"
-    label.position = CGPoint(x: 0, y: -4)
-    label.horizontalAlignmentMode = .center
-    label.verticalAlignmentMode = .center
-    enemy.addChild(label)
-    enemy.name = string
-    enemy.physicsBody = SKPhysicsBody(rectangleOf: texture.size())
-    enemy.physicsBody?.affectedByGravity = false
-    enemy.physicsBody?.categoryBitMask = PhysicsCategory.enemy
-    enemy.physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship
+    let enemy = Enemy(string: string, type: .smallRock)
     
     let x = CGFloat.random(in: 40..<size.width-40)
     let height = size.height

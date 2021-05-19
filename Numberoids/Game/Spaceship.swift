@@ -1,19 +1,19 @@
 //  Created by Dominik Hauser on 16/05/2021.
-//  
+//  Copyright © 2021 dasdom. All rights reserved.
 //
 
 import SpriteKit
 
 class Spaceship: SKSpriteNode {
-  init(texture: SKTexture?) {
+  init() {
     
-    let size = texture?.size() ?? CGSize(width: 1, height: 1)
+    let texture = SKTexture(image: UIImage(named: "spaceship")!)
+    
+    let size = texture.size()
     
     super.init(texture: texture, color: .white, size: size)
     
-    if let texture = texture {
-      physicsBody = SKPhysicsBody(rectangleOf: texture.size())
-    }
+    physicsBody = SKPhysicsBody(rectangleOf: size)
     physicsBody?.affectedByGravity = false
     physicsBody?.categoryBitMask = PhysicsCategory.spaceship
     physicsBody?.isDynamic = false
