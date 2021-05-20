@@ -33,7 +33,7 @@ class StartScene: SKScene {
       node.fillColor = .init(white: 0.1, alpha: 1)
       node.position = CGPoint(x: view.center.x, y: view.center.y - 30)
       
-      let label = SKLabelNode(text: "Bis 20 (+)")
+      let label = SKLabelNode(text: "Up To 20 (+)")
       label.verticalAlignmentMode = .center
       label.horizontalAlignmentMode = .center
       
@@ -49,7 +49,7 @@ class StartScene: SKScene {
       node.fillColor = .init(white: 0.1, alpha: 1)
       node.position = CGPoint(x: view.center.x, y: view.center.y + 30)
       
-      let label = SKLabelNode(text: "Vorschule")
+      let label = SKLabelNode(text: "Pre School")
       label.verticalAlignmentMode = .center
       label.horizontalAlignmentMode = .center
       

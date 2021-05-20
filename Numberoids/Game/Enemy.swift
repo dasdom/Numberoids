@@ -24,8 +24,13 @@ enum EnemyType {
 }
 
 class Enemy: SKSpriteNode {
+  
+  let type: EnemyType
 
   init(string: String, type: EnemyType) {
+    
+    self.type = type
+    
     let texture = SKTexture(image: UIImage(named: type.name)!)
     let label = SKLabelNode(text: string)
     label.fontName = "HelveticaNeue-Bold"

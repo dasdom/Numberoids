@@ -6,8 +6,8 @@ import Foundation
 
 struct FiveDotsTaskGenerator: TaskGeneratorProtocol {
  
-  var keyboardType: KeyboadType = .five
-  var isImage: Bool = false
+  let keyboardType: KeyboadType = .five
+  let isImage: Bool = false
   
   func random() -> String {
     return ["●","●●","●●●","●●●●","●●●●●"].randomElement() ?? "?"
@@ -30,5 +30,28 @@ struct FiveDotsTaskGenerator: TaskGeneratorProtocol {
     }
   }
   
+  func canSeparate(task: String) -> Bool {
+    if task == "●" {
+      return false
+    } else {
+      return true
+    }
+  }
   
+  func components(task: String) -> [String] {
+    switch task {
+      case "●":
+        return ["●", "●"]
+      case "●●":
+        return ["●", "●"]
+      case "●●●":
+        return ["●●", "●"]
+      case "●●●●":
+        return ["●●", "●●"]
+      case "●●●●●":
+        return ["●●●", "●●"]
+      default:
+        return ["●"]
+    }
+  }
 }

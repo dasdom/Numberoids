@@ -10,4 +10,6 @@ protocol TaskGeneratorProtocol {
   var isImage: Bool { get }
   func random() -> String
   func evaluate(task: String, input: String) -> Bool
+  func canSeparate(task: String) -> Bool
+  func components(task: String) -> [String]
 }

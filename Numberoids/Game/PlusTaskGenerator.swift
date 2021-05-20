@@ -25,4 +25,12 @@ struct PlusTaskGenerator: TaskGeneratorProtocol {
     })
     return "\(calcResult)" == input
   }
+  
+  func canSeparate(task: String) -> Bool {
+    return true
+  }
+  
+  func components(task: String) -> [String] {
+    return task.split(separator: "+").map({ String($0) })
+  }
 }
