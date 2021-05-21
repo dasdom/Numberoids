@@ -54,6 +54,8 @@ class GameViewController: UIViewController {
         taskGenerator = FiveDotsTaskGenerator()
       case .upToTweentyPlus:
         taskGenerator = PlusTaskGenerator(maxValue: 20)
+      case .upToTweentyMinus:
+        taskGenerator = MinusTaskGenerator(maxValue: 20)
     }
     contentView.presentGame(taskGenerator: taskGenerator, gameOverHandler: { [weak self] in
       self?.start()

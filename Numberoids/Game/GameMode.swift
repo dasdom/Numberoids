@@ -7,4 +7,5 @@ import Foundation
 enum GameMode {
   case preschool
   case upToTweentyPlus
+  case upToTweentyMinus
 }

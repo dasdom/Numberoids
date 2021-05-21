@@ -26,29 +26,7 @@ class GameScene: SKScene {
   var level: Int = 1 {
     didSet {
       gravityFieldNode?.isEnabled = false
-      let levelNode = SKLabelNode(text: "Level \(level)")
-      levelNode.position = CGPoint(x: frame.width / 2, y: frame.height / 2)
-      levelNode.fontName = "HelveticaNeue-Bold"
-      levelNode.fontSize = 60
-      addChild(levelNode)
-      levelNode.alpha = 0
-      levelNode.setScale(0.5)
-      let showLevelAction = SKAction.group([
-        SKAction.fadeIn(withDuration: 0.5),
-        SKAction.scale(to: 1, duration: 0.5)
-      ])
-      let hideLevelAction = SKAction.group([
-        SKAction.fadeOut(withDuration: 0.5),
-        SKAction.scale(to: 0.5, duration: 0.5)
-      ])
-      levelNode.run(SKAction.sequence([
-        showLevelAction,
-        SKAction.wait(forDuration: 1),
-        hideLevelAction,
-        SKAction.wait(forDuration: 1),
-        SKAction.run({ self.gravityFieldNode?.isEnabled = true }),
-        SKAction.removeFromParent()
-      ]))
+      showLevelUp()
     }
   }
   var emitter: SKEmitterNode? {
@@ -74,9 +52,15 @@ class GameScene: SKScene {
   }
   var numberOfDestroyedObjects = 0 {
     didSet {
+      #if DEBUG
+      if [3,6,9,12].contains(numberOfDestroyedObjects) {
+        level += 1
+      }
+      #else
       if [10,20,50,100].contains(numberOfDestroyedObjects) {
         level += 1
       }
+      #endif
     }
   }
   var score: Int = 0 {
@@ -198,20 +182,8 @@ class GameScene: SKScene {
 
     let string = taskGenerator.random()
     
-    let enemy = Enemy(string: string, type: .alien)
-    
-    let x: CGFloat
-    switch spawnRegion {
-      case .all:
-        x = CGFloat.random(in: 40..<size.width-40)
-      case .left:
-        x = CGFloat.random(in: 40..<size.width / 2 - 40)
-      case .right:
-        x = CGFloat.random(in: size.width / 2 + 40..<size.width - 40)
-    }
-    let height = size.height
-    let y = CGFloat.random(in: height-20...height+40)
-    enemy.position = CGPoint(x: x, y: y)
+    let spawnPosition = enemySpawnPosition(for: spawnRegion)
+    let enemy = Enemy(string: string, type: .alien, position: spawnPosition)
     
     addChild(enemy)
     
@@ -224,20 +196,8 @@ class GameScene: SKScene {
     
     let string = taskGenerator.random()
 
-    let enemy = Enemy(string: string, type: .rock)
-    
-    let x: CGFloat
-    switch spawnRegion {
-      case .all:
-        x = CGFloat.random(in: 40..<size.width-40)
-      case .left:
-        x = CGFloat.random(in: 40..<size.width / 2 - 40)
-      case .right:
-        x = CGFloat.random(in: size.width / 2 + 40..<size.width - 40)
-    }
-    let height = size.height
-    let y = CGFloat.random(in: height-20...height+40)
-    enemy.position = CGPoint(x: x, y: y)
+    let spawnPosition = enemySpawnPosition(for: spawnRegion)
+    let enemy = Enemy(string: string, type: .rock, position: spawnPosition)
     
     addChild(enemy)
     
@@ -256,11 +216,12 @@ class GameScene: SKScene {
     
     for (index, component) in components.enumerated() {
       
-      let enemy = Enemy(string: component, type: .smallRock)
+      
       let x = position.x + CGFloat(index) * 60 - 30
       let y = position.y
+      let spawnPosition = CGPoint(x: x, y: y)
+      let enemy = Enemy(string: component, type: .smallRock, position: spawnPosition)
       
-      enemy.position = CGPoint(x: x, y: y)
       addChild(enemy)
       
       enemy.physicsBody?.applyImpulse(CGVector(dx: CGFloat(index) * 60 - 30, dy: 0))
@@ -276,6 +237,21 @@ class GameScene: SKScene {
       
       enemies.append(enemy)
     }
+  }
+  
+  func enemySpawnPosition(for spawnRegion: SpawnRegion) -> CGPoint {
+    let x: CGFloat
+    switch spawnRegion {
+      case .all:
+        x = CGFloat.random(in: 40..<size.width-40)
+      case .left:
+        x = CGFloat.random(in: 40..<size.width / 2 - 40)
+      case .right:
+        x = CGFloat.random(in: size.width / 2 + 40..<size.width - 40)
+    }
+    let height = size.height
+    let y = CGFloat.random(in: height-20...height+40)
+    return CGPoint(x: x, y: y)
   }
 }
 
@@ -384,5 +360,31 @@ extension GameScene: SKPhysicsContactDelegate {
       node = nil
     }
     return node
+  }
+  
+  private func showLevelUp() {
+    let levelNode = SKLabelNode(text: "Level \(level)")
+    levelNode.position = CGPoint(x: frame.width / 2, y: frame.height / 2)
+    levelNode.fontName = "HelveticaNeue-Bold"
+    levelNode.fontSize = 60
+    addChild(levelNode)
+    levelNode.alpha = 0
+    levelNode.setScale(0.5)
+    let showLevelAction = SKAction.group([
+      SKAction.fadeIn(withDuration: 0.5),
+      SKAction.scale(to: 1, duration: 0.5)
+    ])
+    let hideLevelAction = SKAction.group([
+      SKAction.fadeOut(withDuration: 0.5),
+      SKAction.scale(to: 0.5, duration: 0.5)
+    ])
+    levelNode.run(SKAction.sequence([
+      showLevelAction,
+      SKAction.wait(forDuration: 1),
+      hideLevelAction,
+      SKAction.wait(forDuration: 1),
+      SKAction.run({ self.gravityFieldNode?.isEnabled = true }),
+      SKAction.removeFromParent()
+    ]))
   }
 }

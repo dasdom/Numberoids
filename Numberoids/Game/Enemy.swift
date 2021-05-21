@@ -27,7 +27,7 @@ class Enemy: SKSpriteNode {
   
   let type: EnemyType
 
-  init(string: String, type: EnemyType) {
+  init(string: String, type: EnemyType, position: CGPoint) {
     
     self.type = type
     
@@ -39,6 +39,8 @@ class Enemy: SKSpriteNode {
     label.verticalAlignmentMode = .center
       
     super.init(texture: texture, color: .white, size: texture.size())
+
+    self.position = position
 
     addChild(label)
     name = string

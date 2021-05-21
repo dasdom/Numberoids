@@ -42,6 +42,7 @@ class KeyboardNode: SKSpriteNode {
       key.name = name
       
       let label = SKLabelNode(text: name)
+      label.fontName = "HelveticaNeue-Medium"
       label.horizontalAlignmentMode = .center
       label.verticalAlignmentMode = .center
       
