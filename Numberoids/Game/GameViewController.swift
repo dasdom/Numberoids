@@ -52,10 +52,12 @@ class GameViewController: UIViewController {
     switch mode {
       case .preschool:
         taskGenerator = FiveDotsTaskGenerator()
-      case .upToTweentyPlus:
-        taskGenerator = PlusTaskGenerator(maxValue: 20)
-      case .upToTweentyMinus:
-        taskGenerator = MinusTaskGenerator(maxValue: 20)
+      case .upToTwentyPlus:
+        taskGenerator = PlusTaskGenerator()
+      case .upToTwentyMinus:
+        taskGenerator = MinusTaskGenerator()
+      case .upToTwentyPlusMinus:
+        taskGenerator = PlusMinusTaskGenerator()
     }
     contentView.presentGame(taskGenerator: taskGenerator, gameOverHandler: { [weak self] in
       self?.start()

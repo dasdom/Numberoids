@@ -2,11 +2,11 @@
 //  Copyright © 2021 dasdom. All rights reserved.
 //
 
-import SpriteKit
+import Foundation
 
 struct MinusTaskGenerator: TaskGeneratorProtocol {
   
-  let maxValue: Int
+  let maxValue: Int = 20
   var keyboardType: KeyboadType = .twentyOne
   var isImage: Bool = false
   
@@ -25,7 +25,6 @@ struct MinusTaskGenerator: TaskGeneratorProtocol {
       let int = Int(next) ?? 0
       return result - int
     })
-    print("calc result: \(calcResult)")
     return "\(calcResult)" == input
   }
   

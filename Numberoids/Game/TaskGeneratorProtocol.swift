@@ -2,7 +2,7 @@
 //  Copyright © 2021 dasdom. All rights reserved.
 //
 
-import SpriteKit
+import Foundation
 
 protocol TaskGeneratorProtocol {
   

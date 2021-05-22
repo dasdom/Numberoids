@@ -18,6 +18,7 @@ class GameView: SKView {
 //    showsPhysics = true
     showsFPS = true
     showsNodeCount = true
+//    showsFields = true
   }
   
   required init?(coder: NSCoder) { fatalError() }

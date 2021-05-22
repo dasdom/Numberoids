@@ -2,11 +2,11 @@
 //  Copyright © 2021 dasdom. All rights reserved.
 //
 
-import SpriteKit
+import Foundation
 
 struct PlusTaskGenerator: TaskGeneratorProtocol {
   
-  let maxValue: Int
+  let maxValue: Int = 20
   let keyboardType: KeyboadType = .twentyOne
   let isImage: Bool = false
   

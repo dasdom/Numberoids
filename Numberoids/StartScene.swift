@@ -10,6 +10,7 @@ class StartScene: SKScene {
   var preSchoolNode: SKShapeNode?
   var upToTwentyPlusNode: SKShapeNode?
   var upToTwentyMinusNode: SKShapeNode?
+  var upToTwentyPlusMinusNode: SKShapeNode?
   var buttons: [SKShapeNode] = []
   var startHandler: (GameMode) -> Void = { _ in }
   
@@ -34,6 +35,14 @@ class StartScene: SKScene {
     upToTwentyMinusNode = button(text: "Up To 20 (-)")
     if let node = upToTwentyMinusNode {
       node.position = CGPoint(x: view.center.x, y: view.center.y - 90)
+      
+      addChild(node)
+      buttons.append(node)
+    }
+    
+    upToTwentyPlusMinusNode = button(text: "Up To 20 (+,-)")
+    if let node = upToTwentyPlusMinusNode {
+      node.position = CGPoint(x: view.center.x, y: view.center.y - 150)
       
       addChild(node)
       buttons.append(node)
@@ -76,9 +85,11 @@ class StartScene: SKScene {
         if node == preSchoolNode {
           startHandler(.preschool)
         } else if node == upToTwentyPlusNode {
-          startHandler(.upToTweentyPlus)
+          startHandler(.upToTwentyPlus)
         } else if node == upToTwentyMinusNode {
-          startHandler(.upToTweentyMinus)
+          startHandler(.upToTwentyMinus)
+        } else if node == upToTwentyPlusMinusNode {
+          startHandler(.upToTwentyPlusMinus)
         }
       }
     }

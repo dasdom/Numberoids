@@ -111,14 +111,12 @@ class KeyboardNode: SKSpriteNode {
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
-//    NSLog("touchs: \(touches)")
     if let position = touches.first?.location(in: self) {
       if let node = keys.filter({ $0.calculateAccumulatedFrame().contains(position) }).first {
         node.run(SKAction.sequence([
           SKAction.scale(to: 0.9, duration: 0.05),
           SKAction.scale(to: 1, duration: 0.05)
         ]))
-        
         
         if let name = node.name {
           NSLog("\(name)")
@@ -127,18 +125,4 @@ class KeyboardNode: SKSpriteNode {
       }
     }
   }
-  
-//  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//
-//    if let position = touches.first?.location(in: self) {
-//      if let node = keys.filter({ $0.frame.contains(position) }).first {
-////        let scaleAction = SKAction.scale(by: 1.0/0.95, duration: 0.1)
-////        node.run(scaleAction)
-//        if let name = node.name {
-//          NSLog("\(name)")
-//          textInputHandler(name)
-//        }
-//      }
-//    }
-//  }
 }
