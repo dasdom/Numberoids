@@ -17,32 +17,32 @@ struct PlusMinusTaskGenerator: TaskGeneratorProtocol {
   var keyboardType: KeyboadType = .twentyOne
   var isImage: Bool = false
   
-  func random() -> String {
+  func random() -> (question: String, answer: String) {
     let randomTypeInt = Int.random(in: 0..<QuestionType.allCases.count)
     guard let questionType = QuestionType(rawValue: randomTypeInt) else {
-      return ""
+      return ("","")
     }
     print("type: \(questionType)")
     
     let sum1 = Int.random(in: 0...maxValue)
     let firstInt = Int.random(in: 0...sum1)
 
-    let calcString: String
+    let calcString: (question: String, answer: String)
     switch questionType {
       case .plusPlus:
         let secondInt = sum1 - firstInt
         let thirdInt = Int.random(in: 0...(maxValue - sum1))
-        calcString = "\(firstInt)+\(secondInt)+\(thirdInt)"
+        calcString = (question: "\(firstInt)+\(secondInt)+\(thirdInt)", answer: "\(firstInt+secondInt+thirdInt)")
       case .plusMinus:
         let secondInt = sum1 - firstInt
         let thirdInt = Int.random(in: 0...sum1)
-        calcString = "\(firstInt)+\(secondInt)-\(thirdInt)"
+        calcString = (question: "\(firstInt)+\(secondInt)-\(thirdInt)", answer: "\(firstInt+secondInt-thirdInt)")
       case .minusPlus:
         let secondInt = Int.random(in: 0...(maxValue - (sum1 - firstInt)))
-        calcString = "\(sum1)-\(firstInt)+\(secondInt)"
+        calcString = (question: "\(sum1)-\(firstInt)+\(secondInt)", answer: "\(sum1-firstInt+secondInt)")
       case .minusMinus:
         let secondInt = Int.random(in: 0...(sum1 - firstInt))
-        calcString = "\(sum1)-\(firstInt)-\(secondInt)"
+        calcString = (question: "\(sum1)-\(firstInt)-\(secondInt)", answer: "\(sum1-firstInt-secondInt)")
     }
     return calcString
   }
@@ -83,7 +83,7 @@ struct PlusMinusTaskGenerator: TaskGeneratorProtocol {
     true
   }
   
-  func components(task: String) -> [String] {
-    return task.split(separator: "+").flatMap({ String($0).split(separator: "-").map({ String($0) }) })
+  func components(task: String) -> [(question: String, answer: String)] {
+    return task.split(separator: "+").flatMap({ String($0).split(separator: "-").map({ (question: String($0), answer: String($0)) }) })
   }
 }

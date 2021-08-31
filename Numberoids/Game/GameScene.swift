@@ -17,12 +17,13 @@ class GameScene: SKScene {
   var gravityFieldNode: SKFieldNode?
   var inputLabel: SKLabelNode?
   var labelBullet: SKLabelNode?
-  var enemies: [SKSpriteNode] = []
+  var enemies: [Enemy] = []
   var sparkEmitter: SKEmitterNode?
   var scoreLabel: SKLabelNode?
   var taskGenerator: TaskGeneratorProtocol = FiveDotsTaskGenerator()
   var lifesShips: [SKSpriteNode] = []
   var gameOverHandler: () -> Void = {}
+  var keyboard: KeyboardNode?
   var level: Int = 1 {
     didSet {
       gravityFieldNode?.isEnabled = false
@@ -45,6 +46,7 @@ class GameScene: SKScene {
       setupLifesShips()
       if numberOfShips > 0 {
         spawnRock()
+        updateKeyboard()
       } else {
         gameOverHandler()
       }
@@ -111,9 +113,12 @@ class GameScene: SKScene {
     
     setupLifesShips()
     
-    let keyboard = KeyboardNode(size: view.frame.size, type: taskGenerator.keyboardType, textInputHandler: fireBullet(text:))
-    keyboard.position = CGPoint(x: 0, y: view.safeAreaInsets.bottom)
-    addChild(keyboard)
+    let _keyboard = KeyboardNode(size: view.frame.size, type: taskGenerator.keyboardType, textInputHandler: fireBullet(text:))
+    _keyboard.position = CGPoint(x: 0, y: view.safeAreaInsets.bottom)
+    addChild(_keyboard)
+    keyboard = _keyboard
+
+    updateKeyboard()
   }
   
   private func setupLifesShips() {
@@ -135,7 +140,9 @@ class GameScene: SKScene {
   }
   
   func fireBullet(text: String) {
-    
+
+    keyboard?.disableKeys()
+
     labelBullet = Bullet(text: text)
 
     if let bullet = labelBullet, let spaceship = spaceship {
@@ -150,7 +157,9 @@ class GameScene: SKScene {
       if let node = nodes.first {
         targetPosition = node.position
       } else {
-        targetPosition = CGPoint(x: -10, y: spaceship.position.y)
+//        targetPosition = CGPoint(x: -10, y: spaceship.position.y)
+        showNotCorrect()
+        return
       }
       
       let startPosition = spaceship.position
@@ -170,6 +179,7 @@ class GameScene: SKScene {
         let removeAction = SKAction.run {
           bullet.removeAllActions()
           bullet.removeFromParent()
+          self.keyboard?.enableKeys()
         }
         bullet.run(SKAction.sequence([moveAction, removeAction]))
       })
@@ -177,13 +187,20 @@ class GameScene: SKScene {
       spaceship.run(SKAction.sequence([rotateAction, shootAction]))
     }
   }
+
+  func updateKeyboard() {
+    let answers = enemies.map({ $0.answer })
+    print("answers: \(answers)")
+
+    keyboard?.updateKeys(answers: answers)
+  }
   
   func spawnAlien(spawnRegion: SpawnRegion = .all) {
 
-    let string = taskGenerator.random()
+    let (question, answer) = taskGenerator.random()
     
     let spawnPosition = enemySpawnPosition(for: spawnRegion)
-    let enemy = Enemy(string: string, type: .alien, position: spawnPosition)
+    let enemy = Enemy(string: question, answer: answer, type: .alien, position: spawnPosition)
     
     addChild(enemy)
     
@@ -194,10 +211,10 @@ class GameScene: SKScene {
   
   func spawnRock(spawnRegion: SpawnRegion = .all) {
     
-    let string = taskGenerator.random()
+    let (question, answer) = taskGenerator.random()
 
     let spawnPosition = enemySpawnPosition(for: spawnRegion)
-    let enemy = Enemy(string: string, type: .rock, position: spawnPosition)
+    let enemy = Enemy(string: question, answer: answer, type: .rock, position: spawnPosition)
     
     addChild(enemy)
     
@@ -214,17 +231,17 @@ class GameScene: SKScene {
     
     let components = taskGenerator.components(task: name)
     
-    for (index, component) in components.enumerated() {
+    for (index, (answer, question)) in components.enumerated() {
       
       
       let x = position.x + CGFloat(index) * 60 - 30
       let y = position.y
       let spawnPosition = CGPoint(x: x, y: y)
-      let enemy = Enemy(string: component, type: .smallRock, position: spawnPosition)
+      let enemy = Enemy(string: question, answer: answer, type: .smallRock, position: spawnPosition)
       
       addChild(enemy)
       
-      enemy.physicsBody?.applyImpulse(CGVector(dx: CGFloat(index) * 60 - 30, dy: 0))
+      enemy.physicsBody?.applyImpulse(CGVector(dx: CGFloat(index) * 60 - 30, dy: 10))
       
       for existing in enemies {
         let constraint = SKConstraint.distance(SKRange(lowerLimit: 10), to: enemy)
@@ -298,25 +315,30 @@ extension GameScene: SKPhysicsContactDelegate {
     let position = enemy.position
     
     cleanUp(enemy: enemy)
-    
+
     switch (enemy.type, level) {
       case (_, 1):
         spawnAlien()
+        updateKeyboard()
       case (_, 2):
         spawnRock()
+        updateKeyboard()
       case (_, 3), (.smallRock, 4...):
         if enemies.count < 1 {
           spawnAlien(spawnRegion: .left)
           spawnAlien(spawnRegion: .right)
+          updateKeyboard()
         }
       case (.alien, 4):
         if enemies.count < 1 {
           spawnRock()
+          updateKeyboard()
         }
       case (.alien, 5...):
         if enemies.count < 1 {
           spawnRock(spawnRegion: .left)
           spawnRock(spawnRegion: .right)
+          updateKeyboard()
         }
       case (.rock, 4...):
         if taskGenerator.canSeparate(task: name) {
@@ -324,14 +346,18 @@ extension GameScene: SKPhysicsContactDelegate {
         } else {
           spawnAlien()
         }
+        updateKeyboard()
       case (.smallRock, 4...):
         if enemies.count < 1 {
           spawnAlien(spawnRegion: .left)
           spawnAlien(spawnRegion: .right)
+          updateKeyboard()
         }
       default:
         fatalError()
     }
+
+    keyboard?.enableKeys()
   }
   
   private func explosion(at position: CGPoint) {
@@ -384,6 +410,37 @@ extension GameScene: SKPhysicsContactDelegate {
       hideLevelAction,
       SKAction.wait(forDuration: 1),
       SKAction.run({ self.gravityFieldNode?.isEnabled = true }),
+      SKAction.removeFromParent()
+    ]))
+  }
+
+  private func showNotCorrect() {
+    let levelNode = SKLabelNode(text: "Not correct 😟")
+    levelNode.position = CGPoint(x: frame.width / 2, y: frame.height / 2)
+    levelNode.fontName = "HelveticaNeue-Bold"
+    levelNode.fontSize = 60
+    addChild(levelNode)
+    levelNode.alpha = 0
+    levelNode.setScale(0.5)
+    let showLevelAction = SKAction.group([
+      SKAction.fadeIn(withDuration: 0.2),
+      SKAction.scale(to: 1, duration: 0.2)
+    ])
+    let hideLevelAction = SKAction.group([
+      SKAction.fadeOut(withDuration: 0.5),
+      SKAction.scale(to: 0.5, duration: 0.5),
+      SKAction.run {
+        self.keyboard?.enableKeys()
+      },
+    ])
+    levelNode.run(SKAction.sequence([
+      showLevelAction,
+      SKAction.wait(forDuration: 1),
+      hideLevelAction,
+      SKAction.wait(forDuration: 0.5),
+      SKAction.run({
+        self.gravityFieldNode?.isEnabled = true
+      }),
       SKAction.removeFromParent()
     ]))
   }

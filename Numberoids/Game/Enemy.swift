@@ -26,10 +26,12 @@ enum EnemyType {
 class Enemy: SKSpriteNode {
   
   let type: EnemyType
+  let answer: String
 
-  init(string: String, type: EnemyType, position: CGPoint) {
+  init(string: String, answer: String, type: EnemyType, position: CGPoint) {
     
     self.type = type
+    self.answer = answer
     
     let texture = SKTexture(image: UIImage(named: type.name)!)
     let label = SKLabelNode(text: string)

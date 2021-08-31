@@ -7,7 +7,7 @@ import SpriteKit
 class KeyboardNode: SKSpriteNode {
   
   let textInputHandler: (String) -> Void
-  private let height: CGFloat = 50
+  private let height: CGFloat = 60
   private let gap: CGFloat = 5
   private var keys: [SKShapeNode] = []
 
@@ -29,7 +29,9 @@ class KeyboardNode: SKSpriteNode {
         five()
     }
   }
-  
+
+  required init?(coder aDecoder: NSCoder) { fatalError() }
+
   func five() {
     let numberOfKeysInRow: CGFloat = 5
     let width = (size.width - (numberOfKeysInRow + 1) * gap) / numberOfKeysInRow
@@ -106,9 +108,72 @@ class KeyboardNode: SKSpriteNode {
     addChild(key)
     keys.append(key)
   }
-  
-  required init?(coder aDecoder: NSCoder) { fatalError() }
-  
+
+  func updateKeys(answers: [String]) {
+    let numberOfKeysInRow: CGFloat = 6
+//    let numberOfRows: CGFloat = 2
+    let numberOfKeys = Int(numberOfKeysInRow)
+
+    for key in keys {
+      key.removeFromParent()
+    }
+
+    keys.removeAll()
+
+    var allPossibleAnswers = Set(answers)
+    while allPossibleAnswers.count < numberOfKeys {
+      let offset = Int.random(in: -5...5)
+      if let randomElement = allPossibleAnswers.randomElement(), let intRandomElement = Int(randomElement) {
+        let newElement = intRandomElement + offset
+        if newElement < 0 {
+          continue
+        }
+        let newElementString = "\(newElement)"
+        if false == allPossibleAnswers.contains(newElementString) {
+          allPossibleAnswers.insert(newElementString)
+        }
+      }
+    }
+    print("\(allPossibleAnswers)")
+
+    let sortedPossibleAnswers = allPossibleAnswers.sorted(by: { Int($0)! < Int($1)! })
+
+    let width = (size.width - (numberOfKeysInRow + 1) * gap) / numberOfKeysInRow
+
+    for (index, value) in sortedPossibleAnswers.enumerated() {
+
+      let key = SKShapeNode(rectOf: CGSize(width: width, height: height))
+      key.fillColor = UIColor(named: "button_color") ?? .yellow
+      key.strokeColor = .clear
+      let name = value
+      key.name = name
+
+      let label = SKLabelNode(text: name)
+      label.fontName = "HelveticaNeue-Medium"
+      label.horizontalAlignmentMode = .center
+      label.verticalAlignmentMode = .center
+
+      key.addChild(label)
+
+      let x = gap + CGFloat((index) % 10) * (width + gap) + width / 2
+      let y: CGFloat = gap + height / 2
+      key.position = CGPoint(x: x, y: y)
+
+      addChild(key)
+      keys.append(key)
+    }
+  }
+
+  func disableKeys() {
+    alpha = 0.5
+    isUserInteractionEnabled = false
+  }
+
+  func enableKeys() {
+    alpha = 1
+    isUserInteractionEnabled = true
+  }
+
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
     if let position = touches.first?.location(in: self) {

@@ -9,10 +9,6 @@ struct FiveDotsTaskGenerator: TaskGeneratorProtocol {
   let keyboardType: KeyboadType = .five
   let isImage: Bool = false
   
-  func random() -> String {
-    return ["●","●●","●●●","●●●●","●●●●●"].randomElement() ?? "?"
-  }
-  
   func evaluate(task: String, input: String) -> Bool {
     switch task {
       case "●":
@@ -37,21 +33,29 @@ struct FiveDotsTaskGenerator: TaskGeneratorProtocol {
       return true
     }
   }
-  
-  func components(task: String) -> [String] {
+
+  func random() -> (question: String, answer: String) {
+    return [(question: "●", answer: "1"),
+            (question: "●●", answer: "2"),
+            (question: "●●●", answer: "3"),
+            (question: "●●●●", answer: "4"),
+            (question: "●●●●●", answer: "5")].randomElement() ?? (question: "?", answer: "!")
+  }
+
+  func components(task: String) -> [(question: String, answer: String)] {
     switch task {
       case "●":
-        return ["●", "●"]
+        return [(question: "●", answer: "1"), (question: "●", answer: "1")]
       case "●●":
-        return ["●", "●"]
+        return [(question: "●", answer: "1"), (question: "●", answer: "1")]
       case "●●●":
-        return ["●●", "●"]
+        return [(question: "●●", answer: "2"), (question: "●", answer: "1")]
       case "●●●●":
-        return ["●●", "●●"]
+        return [(question: "●●", answer: "2"), (question: "●●", answer: "2")]
       case "●●●●●":
-        return ["●●●", "●●"]
+        return [(question: "●●●", answer: "3"), (question: "●●", answer: "2")]
       default:
-        return ["●"]
+        return [(question: "●", answer: "1")]
     }
   }
 }

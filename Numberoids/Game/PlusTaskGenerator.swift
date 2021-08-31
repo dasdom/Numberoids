@@ -10,11 +10,11 @@ struct PlusTaskGenerator: TaskGeneratorProtocol {
   let keyboardType: KeyboadType = .twentyOne
   let isImage: Bool = false
   
-  func random() -> String {
-    let sum = Int.random(in: 0...maxValue)
+  func random() -> (question: String, answer: String) {
+    let sum = Int.random(in: 1...maxValue)
     let firstInt = Int.random(in: 0...sum)
     let secondInt = sum - firstInt
-    return "\(firstInt)+\(secondInt)"
+    return (question: "\(firstInt)+\(secondInt)", answer: "\(sum)")
   }
   
   func evaluate(task: String, input: String) -> Bool {
@@ -30,7 +30,7 @@ struct PlusTaskGenerator: TaskGeneratorProtocol {
     return true
   }
   
-  func components(task: String) -> [String] {
-    return task.split(separator: "+").map({ String($0) })
+  func components(task: String) -> [(question: String, answer: String)] {
+    return task.split(separator: "+").map({ (question: String($0), answer: String($0)) })
   }
 }
