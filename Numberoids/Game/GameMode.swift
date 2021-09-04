@@ -8,5 +8,6 @@ enum GameMode {
   case preschool
   case upToTwentyPlus
   case upToTwentyMinus
-  case upToTwentyPlusMinus
+  case upToOneHundredPlus
+  case basicUpToOneHundred
 }

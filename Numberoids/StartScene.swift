@@ -4,53 +4,139 @@
 
 import SpriteKit
 
+enum MaxValue: Int {
+  case ten = 10
+  case twenty = 20
+  case oneHundred = 100
+  case fourHundred = 400
+
+  var text: String {
+    return "\(rawValue)"
+  }
+}
+
 class StartScene: SKScene {
-  
+
+  var plusButtonNode: SKShapeNode?
+  var minusButtonNode: SKShapeNode?
+  var timesButtonNode: SKShapeNode?
+  var overButtonNode: SKShapeNode?
+
+  var tenButtonNode: SKShapeNode?
+  var twentyButtonNode: SKShapeNode?
+  var oneHundredButtonNode: SKShapeNode?
+  var twoHundredButtonNode: SKShapeNode?
+
   var startButtonNode: SKShapeNode?
-  var preSchoolNode: SKShapeNode?
-  var upToTwentyPlusNode: SKShapeNode?
-  var upToTwentyMinusNode: SKShapeNode?
-  var upToTwentyPlusMinusNode: SKShapeNode?
+
   var buttons: [SKShapeNode] = []
-  var startHandler: (GameMode) -> Void = { _ in }
+  var calcOptions: CalcOptions = .plus
+  var maxValue: MaxValue = .twenty
+  var startHandler: (CalcOptions, MaxValue) -> Void = { _, _ in }
   
   override func didMove(to view: SKView) {
-    
-    preSchoolNode = button(text: "Pre School")
-    if let node = preSchoolNode {
-      node.position = CGPoint(x: view.center.x, y: view.center.y + 30)
-      
-      addChild(node)
-      buttons.append(node)
+
+    var buttonNode = button(text: CalcSign.plus.rawValue)
+    buttonNode.position = CGPoint(x: view.frame.width/3 - buttonNode.frame.width, y: view.center.y)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    plusButtonNode = buttonNode
+
+    buttonNode = button(text: CalcSign.minus.rawValue)
+    buttonNode.position = CGPoint(x: view.frame.width/3 + 10, y: view.center.y)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    minusButtonNode = buttonNode
+
+    buttonNode = button(text: CalcSign.times.rawValue)
+    buttonNode.position = CGPoint(x: view.frame.width/3 - buttonNode.frame.width, y: view.center.y - buttonNode.frame.height - 10)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    timesButtonNode = buttonNode
+
+    buttonNode = button(text: CalcSign.over.rawValue)
+    buttonNode.position = CGPoint(x: view.frame.width/3 + 10, y: view.center.y - buttonNode.frame.height - 10)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    overButtonNode = buttonNode
+
+    buttonNode = button(text: MaxValue.ten.text)
+    buttonNode.position = CGPoint(x: view.frame.width*2/3, y: view.center.y)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    tenButtonNode = buttonNode
+
+    buttonNode = button(text: MaxValue.twenty.text)
+    buttonNode.position = CGPoint(x: view.frame.width*2/3 + buttonNode.frame.width + 10, y: view.center.y)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    twentyButtonNode = buttonNode
+
+    buttonNode = button(text: MaxValue.oneHundred.text)
+    buttonNode.position = CGPoint(x: view.frame.width*2/3, y: view.center.y - buttonNode.frame.height - 10)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    oneHundredButtonNode = buttonNode
+
+    buttonNode = button(text: MaxValue.fourHundred.text)
+    buttonNode.position = CGPoint(x: view.frame.width*2/3 + buttonNode.frame.width + 10, y: view.center.y - buttonNode.frame.height - 10)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    twoHundredButtonNode = buttonNode
+
+    buttonNode = button(text: "Start")
+    buttonNode.position = CGPoint(x: view.center.x, y: view.center.y - 2 * buttonNode.frame.height - 20)
+    addChild(buttonNode)
+    buttons.append(buttonNode)
+    startButtonNode = buttonNode
+
+    updateButtons()
+  }
+
+  func updateButtons() {
+
+    let selectedColor = UIColor(white: 0.3, alpha: 1)
+    let normalColor = UIColor(white: 0.1, alpha: 1)
+
+    if calcOptions.contains(.plus) {
+      plusButtonNode?.fillColor = selectedColor
+    } else {
+      plusButtonNode?.fillColor = normalColor
     }
-    
-    upToTwentyPlusNode = button(text: "Up To 20 (+)")
-    if let node = upToTwentyPlusNode {
-      node.position = CGPoint(x: view.center.x, y: view.center.y - 30)
-      
-      addChild(node)
-      buttons.append(node)
+    if calcOptions.contains(.minus) {
+      minusButtonNode?.fillColor = selectedColor
+    } else {
+      minusButtonNode?.fillColor = normalColor
     }
-    
-    upToTwentyMinusNode = button(text: "Up To 20 (-)")
-    if let node = upToTwentyMinusNode {
-      node.position = CGPoint(x: view.center.x, y: view.center.y - 90)
-      
-      addChild(node)
-      buttons.append(node)
+    if calcOptions.contains(.times) {
+      timesButtonNode?.fillColor = selectedColor
+    } else {
+      timesButtonNode?.fillColor = normalColor
     }
-    
-    upToTwentyPlusMinusNode = button(text: "Up To 20 (+,-)")
-    if let node = upToTwentyPlusMinusNode {
-      node.position = CGPoint(x: view.center.x, y: view.center.y - 150)
-      
-      addChild(node)
-      buttons.append(node)
+    if calcOptions.contains(.over) {
+      overButtonNode?.fillColor = selectedColor
+    } else {
+      overButtonNode?.fillColor = normalColor
+    }
+
+    [tenButtonNode, twentyButtonNode, oneHundredButtonNode, twoHundredButtonNode].forEach { node in
+      node?.fillColor = normalColor
+    }
+
+    switch maxValue {
+      case .ten:
+        tenButtonNode?.fillColor = selectedColor
+      case .twenty:
+        twentyButtonNode?.fillColor = selectedColor
+      case .oneHundred:
+        oneHundredButtonNode?.fillColor = selectedColor
+      case .fourHundred:
+        twoHundredButtonNode?.fillColor = selectedColor
     }
   }
   
   func button(text: String) -> SKShapeNode {
-    let node = SKShapeNode(rectOf: CGSize(width: 200, height: 50), cornerRadius: 10)
+    let node = SKShapeNode(rectOf: CGSize(width: 100, height: 50), cornerRadius: 10)
     node.fillColor = .init(white: 0.1, alpha: 1)
     
     let label = SKLabelNode(text: text)
@@ -74,24 +160,63 @@ class StartScene: SKScene {
   
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     
-    if let position = touches.first?.location(in: self),
-       let upToTwentyPlusNode = upToTwentyPlusNode,
-       let preSchoolNode = preSchoolNode {
-      
+    if let position = touches.first?.location(in: self) {
+
+      let previousOptions = calcOptions
+
       if let node = buttons.filter({ $0.frame.contains(position) }).first {
         let scaleAction = SKAction.scale(by: 1/0.95, duration: 0.1)
         node.run(scaleAction)
-        
-        if node == preSchoolNode {
-          startHandler(.preschool)
-        } else if node == upToTwentyPlusNode {
-          startHandler(.upToTwentyPlus)
-        } else if node == upToTwentyMinusNode {
-          startHandler(.upToTwentyMinus)
-        } else if node == upToTwentyPlusMinusNode {
-          startHandler(.upToTwentyPlusMinus)
+
+        if node == startButtonNode {
+          startHandler(calcOptions, maxValue)
+          return
         }
+
+        switch node {
+          case plusButtonNode:
+            if calcOptions.contains(.plus) {
+              calcOptions.remove(.plus)
+            } else {
+              calcOptions.insert(.plus)
+            }
+          case minusButtonNode:
+            if calcOptions.contains(.minus) {
+              calcOptions.remove(.minus)
+            } else {
+              calcOptions.insert(.minus)
+            }
+          case timesButtonNode:
+            if calcOptions.contains(.times) {
+              calcOptions.remove(.times)
+            } else {
+              calcOptions.insert(.times)
+            }
+          case overButtonNode:
+            if calcOptions.contains(.over) {
+              calcOptions.remove(.over)
+            } else {
+              calcOptions.insert(.over)
+            }
+          case tenButtonNode:
+            maxValue = .ten
+          case twentyButtonNode:
+            maxValue = .twenty
+          case oneHundredButtonNode:
+            maxValue = .oneHundred
+          case twoHundredButtonNode:
+            maxValue = .fourHundred
+          default:
+            break
+        }
+
       }
+
+      if calcOptions.isEmpty {
+        calcOptions = previousOptions
+      }
+
+      updateButtons()
     }
   }
 }

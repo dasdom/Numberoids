@@ -16,19 +16,13 @@ class GameViewController: UIViewController {
   override func loadView() {
     let contentView = GameView(frame: UIScreen.main.bounds)
     
-    contentView.presentStart(animated: false, startHandler: { [weak self] mode in
-      self?.game(mode: mode)
+    contentView.presentStart(animated: false, startHandler: { [weak self] calcOptions, maxValue in
+      self?.game(calcOptions: calcOptions, maxValue: maxValue)
     })
     
     view = contentView
   }
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    
-    
-  }
-  
+
   override var shouldAutorotate: Bool {
     return true
   }
@@ -42,23 +36,13 @@ class GameViewController: UIViewController {
   }
   
   func start() {
-    contentView.presentStart(animated: true, startHandler: { [weak self] mode in
-      self?.game(mode: mode)
+    contentView.presentStart(animated: true, startHandler: { [weak self] calcOptions, maxValue in
+      self?.game(calcOptions: calcOptions, maxValue: maxValue)
     })
   }
   
-  func game(mode: GameMode) {
-    let taskGenerator: TaskGeneratorProtocol
-    switch mode {
-      case .preschool:
-        taskGenerator = FiveDotsTaskGenerator()
-      case .upToTwentyPlus:
-        taskGenerator = PlusTaskGenerator()
-      case .upToTwentyMinus:
-        taskGenerator = MinusTaskGenerator()
-      case .upToTwentyPlusMinus:
-        taskGenerator = PlusMinusTaskGenerator()
-    }
+  func game(calcOptions: CalcOptions, maxValue: MaxValue) {
+    let taskGenerator = BasicMathTaskGenerator(calcOptions: calcOptions, maxValue: maxValue)
     contentView.presentGame(taskGenerator: taskGenerator, gameOverHandler: { [weak self] in
       self?.start()
     })

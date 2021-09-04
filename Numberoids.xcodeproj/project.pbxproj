@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F20C825F26579E5800A8F3FC /* MinusTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C825E26579E5800A8F3FC /* MinusTaskGenerator.swift */; };
 		F20C82612657C5DF00A8F3FC /* PlusMinusTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C82602657C5DF00A8F3FC /* PlusMinusTaskGenerator.swift */; };
 		F20C82692657F68600A8F3FC /* NumberoidsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20C82682657F68600A8F3FC /* NumberoidsTests.swift */; };
 		F242022D264C71A000E0CA97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F242022C264C71A000E0CA97 /* AppDelegate.swift */; };
@@ -22,11 +21,11 @@
 		F242024A264EA50500E0CA97 /* StartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420249264EA50500E0CA97 /* StartScene.swift */; };
 		F242024D2651094700E0CA97 /* Spaceship.swift in Sources */ = {isa = PBXBuildFile; fileRef = F242024C2651094700E0CA97 /* Spaceship.swift */; };
 		F242024F2651405200E0CA97 /* TaskGeneratorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */; };
-		F2420251265141C900E0CA97 /* PlusTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */; };
 		F24202532651BDBA00E0CA97 /* KeyboardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24202522651BDBA00E0CA97 /* KeyboardType.swift */; };
 		F24202552651BE6600E0CA97 /* KeyboardNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24202542651BE6600E0CA97 /* KeyboardNode.swift */; };
 		F242025726530BAA00E0CA97 /* FiveDotsTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F242025626530BAA00E0CA97 /* FiveDotsTaskGenerator.swift */; };
 		F24202592653826800E0CA97 /* GameMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24202582653826800E0CA97 /* GameMode.swift */; };
+		F2BB42A126DE75E600046EAF /* BasicMathTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BB42A026DE75E600046EAF /* BasicMathTaskGenerator.swift */; };
 		F2EA72A42655727A00E1074A /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EA72A32655727A00E1074A /* Enemy.swift */; };
 		F2EA72A82655AE9000E1074A /* Bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EA72A72655AE9000E1074A /* Bullet.swift */; };
 /* End PBXBuildFile section */
@@ -42,7 +41,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F20C825E26579E5800A8F3FC /* MinusTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinusTaskGenerator.swift; sourceTree = "<group>"; };
 		F20C82602657C5DF00A8F3FC /* PlusMinusTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusMinusTaskGenerator.swift; sourceTree = "<group>"; };
 		F20C82662657F68600A8F3FC /* NumberoidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NumberoidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F20C82682657F68600A8F3FC /* NumberoidsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberoidsTests.swift; sourceTree = "<group>"; };
@@ -61,11 +59,11 @@
 		F2420249264EA50500E0CA97 /* StartScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScene.swift; sourceTree = "<group>"; };
 		F242024C2651094700E0CA97 /* Spaceship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceship.swift; sourceTree = "<group>"; };
 		F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskGeneratorProtocol.swift; sourceTree = "<group>"; };
-		F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusTaskGenerator.swift; sourceTree = "<group>"; };
 		F24202522651BDBA00E0CA97 /* KeyboardType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardType.swift; sourceTree = "<group>"; };
 		F24202542651BE6600E0CA97 /* KeyboardNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNode.swift; sourceTree = "<group>"; };
 		F242025626530BAA00E0CA97 /* FiveDotsTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveDotsTaskGenerator.swift; sourceTree = "<group>"; };
 		F24202582653826800E0CA97 /* GameMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMode.swift; sourceTree = "<group>"; };
+		F2BB42A026DE75E600046EAF /* BasicMathTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMathTaskGenerator.swift; sourceTree = "<group>"; };
 		F2EA72A32655727A00E1074A /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		F2EA72A72655AE9000E1074A /* Bullet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bullet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -143,10 +141,9 @@
 				F2EA72A32655727A00E1074A /* Enemy.swift */,
 				F2EA72A72655AE9000E1074A /* Bullet.swift */,
 				F242024E2651405200E0CA97 /* TaskGeneratorProtocol.swift */,
-				F2420250265141C900E0CA97 /* PlusTaskGenerator.swift */,
-				F20C825E26579E5800A8F3FC /* MinusTaskGenerator.swift */,
 				F20C82602657C5DF00A8F3FC /* PlusMinusTaskGenerator.swift */,
 				F242025626530BAA00E0CA97 /* FiveDotsTaskGenerator.swift */,
+				F2BB42A026DE75E600046EAF /* BasicMathTaskGenerator.swift */,
 				F24202522651BDBA00E0CA97 /* KeyboardType.swift */,
 			);
 			path = Game;
@@ -286,13 +283,12 @@
 				F2EA72A42655727A00E1074A /* Enemy.swift in Sources */,
 				F242025726530BAA00E0CA97 /* FiveDotsTaskGenerator.swift in Sources */,
 				F2EA72A82655AE9000E1074A /* Bullet.swift in Sources */,
+				F2BB42A126DE75E600046EAF /* BasicMathTaskGenerator.swift in Sources */,
 				F2420233264C71A000E0CA97 /* GameScene.swift in Sources */,
 				F242024A264EA50500E0CA97 /* StartScene.swift in Sources */,
-				F2420251265141C900E0CA97 /* PlusTaskGenerator.swift in Sources */,
 				F2420235264C71A000E0CA97 /* GameViewController.swift in Sources */,
 				F24202592653826800E0CA97 /* GameMode.swift in Sources */,
 				F242024F2651405200E0CA97 /* TaskGeneratorProtocol.swift in Sources */,
-				F20C825F26579E5800A8F3FC /* MinusTaskGenerator.swift in Sources */,
 				F242024D2651094700E0CA97 /* Spaceship.swift in Sources */,
 				F24202532651BDBA00E0CA97 /* KeyboardType.swift in Sources */,
 				F24202552651BE6600E0CA97 /* KeyboardNode.swift in Sources */,

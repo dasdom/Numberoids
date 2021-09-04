@@ -6,7 +6,7 @@ import Foundation
 
 struct FiveDotsTaskGenerator: TaskGeneratorProtocol {
  
-  let keyboardType: KeyboadType = .five
+  let keyboardType: KeyboardType = .five
   let isImage: Bool = false
   
   func evaluate(task: String, input: String) -> Bool {

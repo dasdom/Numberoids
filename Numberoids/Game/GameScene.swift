@@ -147,9 +147,10 @@ class GameScene: SKScene {
 
     if let bullet = labelBullet, let spaceship = spaceship {
       
-      let nodes = enemies.filter({ [weak self] node in
-        guard let self = self, let task = node.name else { return false }
-        return self.taskGenerator.evaluate(task: task, input: text)
+      let nodes = enemies.filter({ node in
+//        guard let self = self, let task = node.name else { return false }
+//        return self.taskGenerator.evaluate(task: task, input: text)
+        return node.answer == text
       })
       
       let targetPosition: CGPoint
@@ -241,7 +242,7 @@ class GameScene: SKScene {
       
       addChild(enemy)
       
-      enemy.physicsBody?.applyImpulse(CGVector(dx: CGFloat(index) * 60 - 30, dy: 10))
+      enemy.physicsBody?.applyImpulse(CGVector(dx: CGFloat(index) * 60 - 30, dy: 20))
       
       for existing in enemies {
         let constraint = SKConstraint.distance(SKRange(lowerLimit: 10), to: enemy)

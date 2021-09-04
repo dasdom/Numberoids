@@ -14,7 +14,7 @@ enum QuestionType: Int, CaseIterable {
 struct PlusMinusTaskGenerator: TaskGeneratorProtocol {
   
   let maxValue: Int = 20
-  var keyboardType: KeyboadType = .twentyOne
+  var keyboardType: KeyboardType = .twentyOne
   var isImage: Bool = false
   
   func random() -> (question: String, answer: String) {

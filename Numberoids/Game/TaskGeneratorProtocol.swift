@@ -6,10 +6,10 @@ import Foundation
 
 protocol TaskGeneratorProtocol {
   
-  var keyboardType: KeyboadType { get }
+  var keyboardType: KeyboardType { get }
   var isImage: Bool { get }
   func random() -> (question: String, answer: String)
-  func evaluate(task: String, input: String) -> Bool
+//  func evaluate(task: String, input: String) -> Bool
   func canSeparate(task: String) -> Bool
   func components(task: String) -> [(question: String, answer: String)]
 }

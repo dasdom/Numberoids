@@ -35,7 +35,7 @@ class GameView: SKView {
     }
   }
   
-  func presentStart(animated: Bool, startHandler: @escaping (GameMode) -> Void) {
+  func presentStart(animated: Bool, startHandler: @escaping (CalcOptions, MaxValue) -> Void) {
     
     startScene = StartScene(size: frame.size)
     

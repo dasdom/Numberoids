@@ -11,7 +11,7 @@ class KeyboardNode: SKSpriteNode {
   private let gap: CGFloat = 5
   private var keys: [SKShapeNode] = []
 
-  init(size: CGSize, type: KeyboadType, textInputHandler: @escaping (String) -> Void) {
+  init(size: CGSize, type: KeyboardType, textInputHandler: @escaping (String) -> Void) {
     
     self.textInputHandler = textInputHandler
     

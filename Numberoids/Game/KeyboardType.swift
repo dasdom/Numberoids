@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum KeyboadType {
+enum KeyboardType {
   case twentyOne
   case five
 }
