@@ -15,12 +15,13 @@ class KeyboardNode: SKSpriteNode {
     
     self.textInputHandler = textInputHandler
     
-    let keyboardSize = CGSize(width: size.width, height: 3 * height + 4 * gap)
+    let keyboardSize = CGSize(width: size.width, height: height + 2 * gap)
     
     super.init(texture: nil, color: .black, size: keyboardSize)
-    
+
+    color = .gray
     isUserInteractionEnabled = true
-    anchorPoint = CGPoint(x: 0, y: 0)
+//    anchorPoint = CGPoint(x: 0, y: 0)
     
     switch type {
       case .twentyOne:
@@ -28,6 +29,11 @@ class KeyboardNode: SKSpriteNode {
       case .five:
         five()
     }
+
+    physicsBody = SKPhysicsBody(rectangleOf: keyboardSize)
+    physicsBody?.isDynamic = false
+    physicsBody?.categoryBitMask = PhysicsCategory.keyboard
+    physicsBody?.contactTestBitMask = PhysicsCategory.enemy
   }
 
   required init?(coder aDecoder: NSCoder) { fatalError() }
@@ -155,8 +161,8 @@ class KeyboardNode: SKSpriteNode {
 
       key.addChild(label)
 
-      let x = gap + CGFloat((index) % 10) * (width + gap) + width / 2
-      let y: CGFloat = gap + height / 2
+      let x = gap + CGFloat((index) % 10) * (width + gap) + width / 2 - size.width / 2
+      let y: CGFloat = gap + height / 2 - size.height / 2
       key.position = CGPoint(x: x, y: y)
 
       addChild(key)

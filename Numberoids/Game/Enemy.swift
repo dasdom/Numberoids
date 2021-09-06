@@ -49,7 +49,7 @@ class Enemy: SKSpriteNode {
     physicsBody = SKPhysicsBody(rectangleOf: texture.size())
     physicsBody?.affectedByGravity = false
     physicsBody?.categoryBitMask = PhysicsCategory.enemy
-    physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship
+    physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship | PhysicsCategory.keyboard
   }
   
   required init?(coder aDecoder: NSCoder) { fatalError() }

@@ -45,7 +45,7 @@ class GameScene: SKScene {
     didSet {
       setupLifesShips()
       if numberOfShips > 0 {
-        spawnRock()
+        spawnEnemy(type: .rock)
         updateKeyboard()
       } else {
         gameOverHandler()
@@ -84,13 +84,13 @@ class GameScene: SKScene {
     
     gravityFieldNode = SKFieldNode.radialGravityField()
     if let node = gravityFieldNode {
-      node.position = CGPoint(x: view.center.x, y: 300)
+      node.position = CGPoint(x: view.center.x, y: 0)
       addChild(node)
     }
     
-    let dragFieldNode = SKFieldNode.dragField()
-    dragFieldNode.position = CGPoint(x: view.center.x, y: 300)
-    addChild(dragFieldNode)
+//    let dragFieldNode = SKFieldNode.dragField()
+//    dragFieldNode.position = CGPoint(x: view.center.x, y: 300)
+//    addChild(dragFieldNode)
     
     inputLabel = SKLabelNode(text: "")
     if let node = inputLabel, let spaceship = spaceship {
@@ -106,17 +106,20 @@ class GameScene: SKScene {
       node.position = CGPoint(x: view.frame.width - 10, y: view.frame.height - 10)
       addChild(node)
     }
-    
-    spawnAlien()
-    
+
+//    spawnEnemy(type: .alien)
+
     sparkEmitter = SKEmitterNode(fileNamed: "spark")
     
     setupLifesShips()
     
     let _keyboard = KeyboardNode(size: view.frame.size, type: taskGenerator.keyboardType, textInputHandler: fireBullet(text:))
-    _keyboard.position = CGPoint(x: 0, y: view.safeAreaInsets.bottom)
+    let keyboardSize = _keyboard.size
+    _keyboard.position = CGPoint(x: keyboardSize.width/2, y: view.safeAreaInsets.bottom + keyboardSize.height/2)
     addChild(_keyboard)
     keyboard = _keyboard
+
+    spawnEnemy(type: .alien)
 
     updateKeyboard()
   }
@@ -148,8 +151,6 @@ class GameScene: SKScene {
     if let bullet = labelBullet, let spaceship = spaceship {
       
       let nodes = enemies.filter({ node in
-//        guard let self = self, let task = node.name else { return false }
-//        return self.taskGenerator.evaluate(task: task, input: text)
         return node.answer == text
       })
       
@@ -158,7 +159,6 @@ class GameScene: SKScene {
       if let node = nodes.first {
         targetPosition = node.position
       } else {
-//        targetPosition = CGPoint(x: -10, y: spaceship.position.y)
         showNotCorrect()
         return
       }
@@ -173,9 +173,9 @@ class GameScene: SKScene {
       //        NSLog("distance \(distance), diffX \(diffX)")
       let alpha: CGFloat = -asin(diffX/distance)
       
-      let rotateAction = SKAction.rotate(toAngle: alpha, duration: 0.2)
+      let rotateAction = SKAction.rotate(toAngle: alpha, duration: 0.15)
       let shootAction = SKAction.run({
-        let moveAction = SKAction.move(to: targetPosition, duration: Double(distance/self.size.height))
+        let moveAction = SKAction.move(to: targetPosition, duration: Double(distance/self.size.height/2))
         
         let removeAction = SKAction.run {
           bullet.removeAllActions()
@@ -196,32 +196,18 @@ class GameScene: SKScene {
     keyboard?.updateKeys(answers: answers)
   }
   
-  func spawnAlien(spawnRegion: SpawnRegion = .all) {
+  func spawnEnemy(spawnRegion: SpawnRegion = .all, type: EnemyType) {
 
     let (question, answer) = taskGenerator.random()
     
     let spawnPosition = enemySpawnPosition(for: spawnRegion)
-    let enemy = Enemy(string: question, answer: answer, type: .alien, position: spawnPosition)
+    let enemy = Enemy(string: question, answer: answer, type: type, position: spawnPosition)
     
-    addChild(enemy)
-    
-    enemies.append(enemy)
-    
-    enemy.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -10))
-  }
-  
-  func spawnRock(spawnRegion: SpawnRegion = .all) {
-    
-    let (question, answer) = taskGenerator.random()
-
-    let spawnPosition = enemySpawnPosition(for: spawnRegion)
-    let enemy = Enemy(string: question, answer: answer, type: .rock, position: spawnPosition)
-    
-    addChild(enemy)
+    insertChild(enemy, at: 1)
     
     enemies.append(enemy)
     
-    enemy.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -10))
+    enemy.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -level*8))
   }
   
   func spawnTwoRocks(name: String?, position: CGPoint) {
@@ -233,8 +219,7 @@ class GameScene: SKScene {
     let components = taskGenerator.components(task: name)
     
     for (index, (answer, question)) in components.enumerated() {
-      
-      
+
       let x = position.x + CGFloat(index) * 60 - 30
       let y = position.y
       let spawnPosition = CGPoint(x: x, y: y)
@@ -242,7 +227,7 @@ class GameScene: SKScene {
       
       addChild(enemy)
       
-      enemy.physicsBody?.applyImpulse(CGVector(dx: CGFloat(index) * 60 - 30, dy: 20))
+      enemy.physicsBody?.applyImpulse(CGVector(dx: CGFloat(index) * 20 - 10, dy: 0))
       
       for existing in enemies {
         let constraint = SKConstraint.distance(SKRange(lowerLimit: 10), to: enemy)
@@ -281,7 +266,7 @@ extension GameScene: SKPhysicsContactDelegate {
                   
       if let node = node(for: PhysicsCategory.enemy, in: contact) as? Enemy {
         
-        self.score += 1
+        self.score += level
         self.numberOfDestroyedObjects += 1
 
         explosion(at: node.position)
@@ -306,6 +291,14 @@ extension GameScene: SKPhysicsContactDelegate {
                 
         numberOfShips -= 1
       }
+    } else if collision == PhysicsCategory.enemy | PhysicsCategory.keyboard {
+
+      if let node = node(for: PhysicsCategory.enemy, in: contact) as? Enemy {
+
+        explosion(at: node.position)
+
+        nextEnemy(previous: node)
+      }
     }
   }
   
@@ -319,39 +312,39 @@ extension GameScene: SKPhysicsContactDelegate {
 
     switch (enemy.type, level) {
       case (_, 1):
-        spawnAlien()
+        spawnEnemy(type: .alien)
         updateKeyboard()
       case (_, 2):
-        spawnRock()
+        spawnEnemy(type: .rock)
         updateKeyboard()
       case (_, 3), (.smallRock, 4...):
         if enemies.count < 1 {
-          spawnAlien(spawnRegion: .left)
-          spawnAlien(spawnRegion: .right)
+          spawnEnemy(spawnRegion: .left, type: .alien)
+          spawnEnemy(spawnRegion: .right, type: .alien)
           updateKeyboard()
         }
       case (.alien, 4):
         if enemies.count < 1 {
-          spawnRock()
+          spawnEnemy(type: .rock)
           updateKeyboard()
         }
       case (.alien, 5...):
         if enemies.count < 1 {
-          spawnRock(spawnRegion: .left)
-          spawnRock(spawnRegion: .right)
+          spawnEnemy(spawnRegion: .left, type: .rock)
+          spawnEnemy(spawnRegion: .right, type: .rock)
           updateKeyboard()
         }
       case (.rock, 4...):
         if taskGenerator.canSeparate(task: name) {
           spawnTwoRocks(name: name, position: position)
         } else {
-          spawnAlien()
+          spawnEnemy(type: .alien)
         }
         updateKeyboard()
       case (.smallRock, 4...):
         if enemies.count < 1 {
-          spawnAlien(spawnRegion: .left)
-          spawnAlien(spawnRegion: .right)
+          spawnEnemy(spawnRegion: .left, type: .alien)
+          spawnEnemy(spawnRegion: .right, type: .alien)
           updateKeyboard()
         }
       default:
