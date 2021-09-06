@@ -193,7 +193,7 @@ class GameScene: SKScene {
     let answers = enemies.map({ $0.answer })
     print("answers: \(answers)")
 
-    keyboard?.updateKeys(answers: answers)
+    keyboard?.updateKeys(answers: answers, maxValue: taskGenerator.maxValue.rawValue)
   }
   
   func spawnEnemy(spawnRegion: SpawnRegion = .all, type: EnemyType) {
@@ -207,7 +207,7 @@ class GameScene: SKScene {
     
     enemies.append(enemy)
     
-    enemy.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -level*8))
+    enemy.physicsBody?.applyImpulse(CGVector(dx: 0, dy: -level*6))
   }
   
   func spawnTwoRocks(name: String?, position: CGPoint) {
@@ -290,6 +290,8 @@ extension GameScene: SKPhysicsContactDelegate {
         explosion(at: node.position)
                 
         numberOfShips -= 1
+
+        keyboard?.enableKeys()
       }
     } else if collision == PhysicsCategory.enemy | PhysicsCategory.keyboard {
 

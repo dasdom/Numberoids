@@ -5,7 +5,8 @@
 import Foundation
 
 struct FiveDotsTaskGenerator: TaskGeneratorProtocol {
- 
+
+  let maxValue: MaxValue  = .ten
   let keyboardType: KeyboardType = .five
   let isImage: Bool = false
   

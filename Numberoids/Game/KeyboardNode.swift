@@ -115,7 +115,7 @@ class KeyboardNode: SKSpriteNode {
     keys.append(key)
   }
 
-  func updateKeys(answers: [String]) {
+  func updateKeys(answers: [String], maxValue: Int) {
     let numberOfKeysInRow: CGFloat = 6
 //    let numberOfRows: CGFloat = 2
     let numberOfKeys = Int(numberOfKeysInRow)
@@ -131,7 +131,7 @@ class KeyboardNode: SKSpriteNode {
       let offset = Int.random(in: -5...5)
       if let randomElement = allPossibleAnswers.randomElement(), let intRandomElement = Int(randomElement) {
         let newElement = intRandomElement + offset
-        if newElement < 0 {
+        if newElement < 0 || newElement > maxValue {
           continue
         }
         let newElementString = "\(newElement)"
