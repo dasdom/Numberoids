@@ -15,7 +15,7 @@ class GameView: SKView {
     super.init(frame: frame)
         
 //    ignoresSiblingOrder = true
-//    showsPhysics = true
+    showsPhysics = true
     showsFPS = true
     showsNodeCount = true
 //    showsFields = true

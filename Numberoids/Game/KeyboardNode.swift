@@ -155,7 +155,7 @@ class KeyboardNode: SKSpriteNode {
       key.name = name
 
       let label = SKLabelNode(text: name)
-      label.fontName = "HelveticaNeue-Medium"
+      label.fontName = "Menlo-Bold"
       label.horizontalAlignmentMode = .center
       label.verticalAlignmentMode = .center
 

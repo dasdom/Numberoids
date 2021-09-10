@@ -35,7 +35,7 @@ class Enemy: SKSpriteNode {
     
     let texture = SKTexture(image: UIImage(named: type.name)!)
     let label = SKLabelNode(text: string)
-    label.fontName = "HelveticaNeue-Bold"
+    label.fontName = "Menlo-Bold"
     label.position = CGPoint(x: 0, y: -4)
     label.horizontalAlignmentMode = .center
     label.verticalAlignmentMode = .center
@@ -48,6 +48,7 @@ class Enemy: SKSpriteNode {
     name = string
     physicsBody = SKPhysicsBody(rectangleOf: texture.size())
     physicsBody?.affectedByGravity = false
+    physicsBody?.allowsRotation = false
     physicsBody?.categoryBitMask = PhysicsCategory.enemy
     physicsBody?.contactTestBitMask = PhysicsCategory.bullet | PhysicsCategory.spaceship | PhysicsCategory.keyboard
   }

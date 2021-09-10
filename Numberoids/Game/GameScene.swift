@@ -113,6 +113,14 @@ class GameScene: SKScene {
     
     setupLifesShips()
     
+    let frame = view.frame.insetBy(dx: -40, dy: -100)
+    let edgeNode = SKShapeNode(rect: frame)
+    edgeNode.isUserInteractionEnabled = false
+    edgeNode.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+    edgeNode.physicsBody?.isDynamic = false
+
+    addChild(edgeNode)
+
     let _keyboard = KeyboardNode(size: view.frame.size, type: taskGenerator.keyboardType, textInputHandler: fireBullet(text:))
     let keyboardSize = _keyboard.size
     _keyboard.position = CGPoint(x: keyboardSize.width/2, y: view.safeAreaInsets.bottom + keyboardSize.height/2)
@@ -122,6 +130,7 @@ class GameScene: SKScene {
     spawnEnemy(type: .alien)
 
     updateKeyboard()
+
   }
   
   private func setupLifesShips() {

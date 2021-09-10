@@ -36,56 +36,67 @@ class StartScene: SKScene {
   
   override func didMove(to view: SKView) {
 
+    let label = SKLabelNode(text: "Numberoids")
+//    label.fontName = "Menlo-Bold"
+    label.fontSize = 80
+    label.position = CGPoint(x: view.center.x, y: view.center.y+140)
+    label.horizontalAlignmentMode = .center
+    label.verticalAlignmentMode = .center
+    addChild(label)
+
     var buttonNode = button(text: CalcSign.plus.rawValue)
-    buttonNode.position = CGPoint(x: view.frame.width/3 - buttonNode.frame.width, y: view.center.y)
+    let leftX = view.frame.width/2 - 1.5 * buttonNode.frame.width - 30
+    let interButtonGap: CGFloat = 10
+    let rightX = view.frame.width/2 + 0.5 * buttonNode.frame.width + 15
+    buttonNode.position = CGPoint(x: leftX, y: view.center.y)
     addChild(buttonNode)
     buttons.append(buttonNode)
     plusButtonNode = buttonNode
 
     buttonNode = button(text: CalcSign.minus.rawValue)
-    buttonNode.position = CGPoint(x: view.frame.width/3 + 10, y: view.center.y)
+    buttonNode.position = CGPoint(x: leftX + interButtonGap + buttonNode.frame.width, y: view.center.y)
     addChild(buttonNode)
     buttons.append(buttonNode)
     minusButtonNode = buttonNode
 
     buttonNode = button(text: CalcSign.times.rawValue)
-    buttonNode.position = CGPoint(x: view.frame.width/3 - buttonNode.frame.width, y: view.center.y - buttonNode.frame.height - 10)
+    buttonNode.position = CGPoint(x: leftX, y: view.center.y - buttonNode.frame.height - 10)
     addChild(buttonNode)
     buttons.append(buttonNode)
     timesButtonNode = buttonNode
 
     buttonNode = button(text: CalcSign.over.rawValue)
-    buttonNode.position = CGPoint(x: view.frame.width/3 + 10, y: view.center.y - buttonNode.frame.height - 10)
+    buttonNode.position = CGPoint(x: leftX + interButtonGap + buttonNode.frame.width, y: view.center.y - buttonNode.frame.height - 10)
     addChild(buttonNode)
     buttons.append(buttonNode)
     overButtonNode = buttonNode
 
     buttonNode = button(text: MaxValue.ten.text)
-    buttonNode.position = CGPoint(x: view.frame.width*2/3, y: view.center.y)
+    buttonNode.position = CGPoint(x: rightX, y: view.center.y)
     addChild(buttonNode)
     buttons.append(buttonNode)
     tenButtonNode = buttonNode
 
     buttonNode = button(text: MaxValue.twenty.text)
-    buttonNode.position = CGPoint(x: view.frame.width*2/3 + buttonNode.frame.width + 10, y: view.center.y)
+    buttonNode.position = CGPoint(x: rightX + buttonNode.frame.width + 10, y: view.center.y)
     addChild(buttonNode)
     buttons.append(buttonNode)
     twentyButtonNode = buttonNode
 
     buttonNode = button(text: MaxValue.oneHundred.text)
-    buttonNode.position = CGPoint(x: view.frame.width*2/3, y: view.center.y - buttonNode.frame.height - 10)
+    buttonNode.position = CGPoint(x: rightX, y: view.center.y - buttonNode.frame.height - 10)
     addChild(buttonNode)
     buttons.append(buttonNode)
     oneHundredButtonNode = buttonNode
 
     buttonNode = button(text: MaxValue.fourHundred.text)
-    buttonNode.position = CGPoint(x: view.frame.width*2/3 + buttonNode.frame.width + 10, y: view.center.y - buttonNode.frame.height - 10)
+    buttonNode.position = CGPoint(x: rightX + buttonNode.frame.width + 10, y: view.center.y - buttonNode.frame.height - 10)
     addChild(buttonNode)
     buttons.append(buttonNode)
     twoHundredButtonNode = buttonNode
 
-    buttonNode = button(text: "Start")
-    buttonNode.position = CGPoint(x: view.center.x, y: view.center.y - 2 * buttonNode.frame.height - 20)
+    buttonNode = button(text: "Start", width: 200)
+    buttonNode.position = CGPoint(x: view.center.x, y: view.center.y - 2 * buttonNode.frame.height - 40)
     addChild(buttonNode)
     buttons.append(buttonNode)
     startButtonNode = buttonNode
@@ -135,8 +146,8 @@ class StartScene: SKScene {
     }
   }
   
-  func button(text: String) -> SKShapeNode {
-    let node = SKShapeNode(rectOf: CGSize(width: 100, height: 50), cornerRadius: 10)
+  func button(text: String, width: CGFloat = 100) -> SKShapeNode {
+    let node = SKShapeNode(rectOf: CGSize(width: width, height: 50), cornerRadius: 10)
     node.fillColor = .init(white: 0.1, alpha: 1)
     
     let label = SKLabelNode(text: text)
