@@ -9,13 +9,13 @@ class GameView: SKView {
 
   var startScene: StartScene?
   var gameScene: GameScene?
-  
+
   override init(frame: CGRect) {
     
     super.init(frame: frame)
         
 //    ignoresSiblingOrder = true
-    showsPhysics = true
+//    showsPhysics = true
     showsFPS = true
     showsNodeCount = true
 //    showsFields = true

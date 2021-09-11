@@ -72,7 +72,7 @@ class GameScene: SKScene {
   }
  
   override func didMove(to view: SKView) {
-    
+
     physicsWorld.contactDelegate = self
     backgroundColor = .black
     
@@ -131,6 +131,11 @@ class GameScene: SKScene {
 
     updateKeyboard()
 
+    let musicAudioNode = SKAudioNode(fileNamed: "loop.m4a")
+    musicAudioNode.autoplayLooped = true
+    musicAudioNode.isPositional = false
+    musicAudioNode.run(SKAction.changeVolume(to: 0.3, duration: 0))
+    addChild(musicAudioNode)
   }
   
   private func setupLifesShips() {

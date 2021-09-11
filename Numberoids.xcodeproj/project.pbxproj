@@ -27,6 +27,7 @@
 		F2BB42A126DE75E600046EAF /* BasicMathTaskGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BB42A026DE75E600046EAF /* BasicMathTaskGenerator.swift */; };
 		F2EA72A42655727A00E1074A /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EA72A32655727A00E1074A /* Enemy.swift */; };
 		F2EA72A82655AE9000E1074A /* Bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EA72A72655AE9000E1074A /* Bullet.swift */; };
+		F2F8EFC926ECCF9800DA176C /* loop.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F2F8EFC826ECCF7200DA176C /* loop.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		F2BB42A026DE75E600046EAF /* BasicMathTaskGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMathTaskGenerator.swift; sourceTree = "<group>"; };
 		F2EA72A32655727A00E1074A /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		F2EA72A72655AE9000E1074A /* Bullet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bullet.swift; sourceTree = "<group>"; };
+		F2F8EFC626EBFEFE00DA176C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		F2F8EFC826ECCF7200DA176C /* loop.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = loop.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +102,7 @@
 				F242022B264C71A000E0CA97 /* Numberoids */,
 				F20C82672657F68600A8F3FC /* NumberoidsTests */,
 				F242022A264C71A000E0CA97 /* Products */,
+				F2F8EFC526EBFEFE00DA176C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -121,6 +125,7 @@
 				F2420247264D4F1E00E0CA97 /* spark.sks */,
 				F2420236264C71A000E0CA97 /* Main.storyboard */,
 				F2420241264C77AA00E0CA97 /* LaunchScreen.storyboard */,
+				F2F8EFC826ECCF7200DA176C /* loop.m4a */,
 				F2420239264C71A000E0CA97 /* Assets.xcassets */,
 				F242023B264C71A000E0CA97 /* Info.plist */,
 			);
@@ -144,6 +149,14 @@
 				F24202522651BDBA00E0CA97 /* KeyboardType.swift */,
 			);
 			path = Game;
+			sourceTree = "<group>";
+		};
+		F2F8EFC526EBFEFE00DA176C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F2F8EFC626EBFEFE00DA176C /* AVFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,6 +251,7 @@
 				F2420242264C77AA00E0CA97 /* LaunchScreen.storyboard in Resources */,
 				F2420248264D4F1E00E0CA97 /* spark.sks in Resources */,
 				F2420238264C71A000E0CA97 /* Main.storyboard in Resources */,
+				F2F8EFC926ECCF9800DA176C /* loop.m4a in Resources */,
 				F242023A264C71A000E0CA97 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
